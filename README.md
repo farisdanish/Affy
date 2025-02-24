@@ -75,11 +75,18 @@ This project is a booking platform designed with multiple user roles, including 
 ### Contributing
 This project is a personal learning initiative. However, feel free to fork the repository and submit pull requests if you have suggestions or improvements.
 
-Fork the repository.
-Create a new branch (git checkout -b feature/YourFeature).
-Commit your changes (git commit -m 'Add some feature').
-Push to the branch (git push origin feature/YourFeature).
-Open a pull request.
+- Fork the repository.
+- Create a new branch
+```bash
+git checkout -b feature/YourFeature
+- Commit your changes
+```bash
+git commit -m 'Add some feature
+- Push to the branch
+```bash
+git push origin feature/YourFeature
+
+- Open a pull request.
 
 ### License
 This project is open-source and available under the MIT License.
