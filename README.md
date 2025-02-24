@@ -80,15 +80,15 @@ This project is a personal learning initiative. However, feel free to fork the r
 
 ```bash
 git checkout -b feature/YourFeature
-
+```
 - Commit your changes:
-
+```bash
 git commit -m 'Add some feature
-
+```
 - Push to the branch:
-
+```bash
 git push origin feature/YourFeature
-
+```
 - Open a pull request.
 
 ### License
