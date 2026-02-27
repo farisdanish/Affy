@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/affy-app', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/affy-app');
 
 // Define routes and middleware
 app.listen(PORT, () => {
@@ -20,7 +20,4 @@ const User = require('../models/User');
 const Slot = require('../models/Slot');
 const Booking = require('../models/Booking');
 
-app.get('/slots', async (req, res) => {
-  const slots = await Slot.find();
-  res.json(slots);
-});
+app.use('/slots', require('../routes/slot'));
