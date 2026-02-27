@@ -1,95 +1,156 @@
 # Affy
-A MERN stack-based booking system that features an affiliate marketing model. Main objective is to explore full-stack development using React.js, Node.js, Express, and MongoDB.
 
-# Booking System with Affiliate Marketing
+Affy is a role-based booking and affiliate attribution platform for service merchants and creators.
+It combines scheduling, referral distribution, and commission tracking into one product so growth can be measured from the first booking.
+**Merchant publishes a slot -> Agent shares a referral link -> Public user books -> commission is automatically recorded**.
 
-A MERN stack-based booking system that features an affiliate marketing model. This self-learning project is designed to help explore full-stack development using **React.js**, **Node.js**, **Express**, and **MongoDB**.
+Repository: [github.com/farisdanish/Affy](https://github.com/farisdanish/Affy)
 
-## Table of Contents
+## What Is a Slot?
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Development Roadmap](#development-roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+A **slot** is a single bookable offer created by a merchant (for example, a consultation, service session, or appointment window).
 
-## Overview
+## Current Status
 
-This project is a booking platform designed with multiple user roles, including Admin, Agents/Influencers, Merchants, and Public Users. It integrates an affiliate marketing model where agents can earn commissions through referral links. Additionally, the platform offers a mall directory feature that guides users to F&B outlets based on location, with alternatives to address indoor GPS limitations.
+### Sprint 1 (Auth & Foundation)
 
-## Features
+- [x] User registration and login (JWT)
+- [x] Basic role recognition (Admin, Agent, Merchant, User)
+- [ ] Auth middleware (protect routes by role)
+- [ ] CI/CD pipeline via GitHub Actions
+- [ ] Deploy to Vercel
 
-- **User Roles & Authentication:**  
-  - Admin: Full access to manage the system  
-  - Agents/Influencers: Earn commissions from referrals  
-  - Merchants: Manage bookings and listings  
-  - Public Users: Browse and book services
+Login is working. Sprint 1 is close to complete.
 
-- **Affiliate Marketing:**  
-  - Unique referral link generation  
-  - Commission tracking and payout calculation
+### Immediate Next Task
 
-- **Booking System:**  
-  - CRUD operations for bookings  
-  - Payment integration options (Stripe, PayPal)
+Implement auth middleware so protected routes can enforce login + role checks.
 
-- **Mall Directory:**  
-  - Location-based search and recommendations  
-  - Alternative indoor navigation solutions (e.g., QR codes, manual check-ins)
+```bash
+mkdir -p middleware
+touch middleware/auth.js
+```
 
-- **Admin Dashboard:**  
-  - User management and analytics  
-  - Reporting on bookings and commissions
+Why this is next:
+- Every Sprint 2 route depends on route protection
+- It establishes simple RBAC early without over-engineering
+
+## Sprint Plan
+
+### Walking Skeleton (pre-Sprint 1)
+- React frontend online
+- One Express endpoint live
+- MongoDB connected
+- Deploy early (working software over feature completeness)
+
+### Sprint 1 - Auth & Foundation
+- JWT registration/login
+- Basic role recognition
+- CI/CD with GitHub Actions
+- Early deployment to Vercel
+
+### Sprint 2 - Core Affiliate Loop
+- Merchant API: CRUD booking slots
+- Agent API: referral link generation (`?ref=agent123`)
+- Public booking flow capturing `ref` and saving it
+- End of Sprint 2 target: first demoable product
+
+### Sprint 3 - First Complete User Journey
+- Public user browses listings and books end-to-end
+- Mock payment confirm flow (no Stripe yet)
+
+### Sprint 4 - Affiliate Layer
+- Commission tracking and calculation
+- Basic agent dashboard
+- Payment integration (Stripe/PayPal)
+
+### Deferred
+- Admin dashboard/internal tooling
+- Mall directory / indoor navigation
+- UI polish and animations
+
+## User Roles
+
+- **Admin**: full system access, analytics, payout management
+- **Agent/Influencer**: generates referral links, tracks commissions
+- **Merchant**: manages listings and booking slots
+- **Public User**: browses and books services
 
 ## Tech Stack
 
-| Component                | Technology               | Purpose                                 |
-| ------------------------ | ------------------------ | --------------------------------------- |
-| **Frontend**             | React.js                 | Building interactive UIs                |
-| **Backend**              | Node.js + Express        | API and server-side logic               |
-| **Database**             | MongoDB (Atlas)          | NoSQL data storage                      |
-| **Authentication**       | JWT                      | Secure user authentication              |
-| **Maps API**             | Google Maps API          | Location-based features                 |
-| **Hosting**              | Vercel                   | Deploying the React application         |
-| **Version Control**      | Git + GitHub             | Code management and collaboration       |
+- **Frontend**: React.js
+- **Backend**: Node.js + Express
+- **Database**: MongoDB (Atlas)
+- **Auth**: JWT
+- **Maps**: Google Maps API (later phase)
+- **Hosting**: Vercel
 
-## Installation
+## Project Structure
 
-### Prerequisites
+```text
+affy-app/
+  client/          # React frontend
+  server/          # Express server entry
+  routes/          # API routes (auth, slots)
+  models/          # Mongoose models
+```
 
-- [Node.js](https://nodejs.org/en/) (v12+)
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account (or local MongoDB)
-- Git
+## Local Development
 
-### Backend Setup
+### 1. Install dependencies
 
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/your-username/booking-system.git
-   cd booking-system/backend
-
-### Contributing
-This project is a personal learning initiative. However, feel free to fork the repository and submit pull requests if you have suggestions or improvements.
-
-- Fork the repository.
-- Create a new branch:
+From project root:
 
 ```bash
-git checkout -b feature/YourFeature
+npm install
 ```
-- Commit your changes:
-```bash
-git commit -m 'Add some feature
-```
-- Push to the branch:
-```bash
-git push origin feature/YourFeature
-```
-- Open a pull request.
 
-### License
-This project is open-source and available under the MIT License.
+For frontend:
+
+```bash
+cd client
+npm install
+```
+
+### 2. Environment variables
+
+Create `.env` in project root:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
+
+### 3. Run backend
+
+From project root:
+
+```bash
+node server/server.js
+```
+
+### 4. Run frontend
+
+From `client/`:
+
+```bash
+npm start
+```
+
+## Current API Endpoints
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /slots`
+- `POST /slots`
+
+## Build Approach
+
+- Keep schemas evolving with features (avoid heavy upfront schema design)
+- Implement simple RBAC first, refine later
+- Use vertical slices (end-to-end features) instead of layer-by-layer development
+
+## License
+
+MIT (see [`LICENSE`](./LICENSE)).
