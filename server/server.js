@@ -25,6 +25,11 @@ require('../models/User');
 require('../models/Slot');
 require('../models/Booking');
 
+// Health check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'Affy API' });
+});
+
 // Routes
 app.use('/auth', require('../routes/auth'));
 app.use('/slots', require('../routes/slots'));
