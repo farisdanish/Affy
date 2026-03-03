@@ -12,28 +12,17 @@ A **slot** is a single bookable offer created by a merchant (for example, a cons
 
 ## Current Status
 
-### Sprint 1 (Auth & Foundation)
+### Sprint 1 (Auth & Foundation) ✅
 
 - [x] User registration and login (JWT)
 - [x] Basic role recognition (Admin, Agent, Merchant, User)
-- [ ] Auth middleware (protect routes by role)
-- [ ] CI/CD pipeline via GitHub Actions
-- [ ] Deploy to Vercel
+- [x] Auth middleware (protect routes by role)
+- [x] Frontend: Login, Register, and Dashboard pages (MUI + Lucide React + Inter font)
+- [x] CI/CD pipeline via GitHub Actions
+- [x] Deployed to Vercel (frontend) and Render (backend)
+- [x] Admin user seeder
 
-Login is working. Sprint 1 is close to complete.
-
-### Immediate Next Task
-
-Implement auth middleware so protected routes can enforce login + role checks.
-
-```bash
-mkdir -p middleware
-touch middleware/auth.js
-```
-
-Why this is next:
-- Every Sprint 2 route depends on route protection
-- It establishes simple RBAC early without over-engineering
+Sprint 1 is complete. Moving to Sprint 2.
 
 ## Sprint Plan
 
@@ -78,21 +67,37 @@ Why this is next:
 
 ## Tech Stack
 
-- **Frontend**: React.js
+- **Frontend**: React.js, Material UI, Lucide React, Inter Font
 - **Backend**: Node.js + Express
 - **Database**: MongoDB (Atlas)
 - **Auth**: JWT
 - **Maps**: Google Maps API (later phase)
-- **Hosting**: Vercel
+- **Hosting**: Vercel (frontend), Render (backend)
+
+## Deployment
+
+| Service | Platform | URL |
+|---|---|---|
+| Frontend | Vercel | [affy-three.vercel.app](https://affy-three.vercel.app) |
+| Backend API | Render | [affy.onrender.com](https://affy.onrender.com) |
+| Database | MongoDB Atlas | M0 free cluster |
 
 ## Project Structure
 
 ```text
 affy-app/
-  client/          # React frontend
-  server/          # Express server entry
-  routes/          # API routes (auth, slots)
-  models/          # Mongoose models
+  client/            # React frontend (Vercel)
+    src/
+      context/       # React Contexts (AuthContext)
+      pages/         # Page components (auth/, dashboard/)
+      routes/        # Route guards (ProtectedRoute)
+      services/      # API service layer (Axios)
+  server/            # Express server entry
+  routes/            # API routes (auth, slots)
+  models/            # Mongoose models (User, Slot, Booking)
+  middleware/        # Auth middleware (JWT + role checks)
+  seeders/           # Database seeders (admin user)
+  .github/workflows/ # CI/CD pipeline
 ```
 
 ## Local Development
@@ -122,6 +127,12 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 ```
 
+Create `.env` in `client/` (or set in Vercel dashboard):
+
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
+
 ### 3. Run backend
 
 From project root:
@@ -138,12 +149,23 @@ From `client/`:
 npm start
 ```
 
+### 5. Seed admin user
+
+```bash
+npm run seed:admin
+```
+
+Default admin: `admin@affy.com` / `admin123`
+
 ## Current API Endpoints
 
-- `POST /auth/register`
-- `POST /auth/login`
-- `GET /slots`
-- `POST /slots`
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/` | Public | Health check |
+| `POST` | `/auth/register` | Public | Register a new user |
+| `POST` | `/auth/login` | Public | Login, returns JWT + user |
+| `GET` | `/slots` | Public | List all slots |
+| `POST` | `/slots` | Merchant/Admin | Create a new slot |
 
 ## Build Approach
 
