@@ -13,12 +13,9 @@ import {
     MenuItem,
 } from '@mui/material';
 import { UserPlus } from 'lucide-react';
+import { REGISTRABLE_ROLES } from '../../config/roles';
 
-const ROLES = [
-    { value: 'user', label: 'Public User' },
-    { value: 'merchant', label: 'Merchant' },
-    { value: 'agent', label: 'Agent / Influencer' },
-];
+
 
 const inputSx = {
     mb: 2,
@@ -155,7 +152,7 @@ const Register = () => {
                             onChange={(e) => setRole(e.target.value)}
                             sx={{ ...inputSx, mb: 3 }}
                         >
-                            {ROLES.map((option) => (
+                            {REGISTRABLE_ROLES.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                 </MenuItem>

@@ -24,6 +24,16 @@ A **slot** is a single bookable offer created by a merchant (for example, a cons
 
 Sprint 1 is complete. Moving to Sprint 2.
 
+### Sprint 2 (Core Affiliate Loop)
+
+- [ ] Merchant dashboard: CRUD booking slots
+- [ ] Agent dashboard: referral link generation (`?ref=agent123`)
+- [ ] Public booking flow capturing `ref` and saving it
+- [ ] Role-specific layouts and navigation (Navbar, Sidebar)
+- [ ] Reusable UI components (`components/common/`)
+- [ ] Custom hooks for data fetching (`hooks/`)
+- [ ] Activity logging model
+
 ## Sprint Plan
 
 ### Walking Skeleton (pre-Sprint 1)
