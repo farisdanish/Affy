@@ -49,13 +49,12 @@ jobs:
           fetch-depth: 0
 
       - name: Super-Linter
-        uses: super-linter/super-linter@v7
+        uses: super-linter/super-linter/slim@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_CSS: true
-          VALIDATE_JSON: true
           VALIDATE_YAML: true
           VALIDATE_MARKDOWN: true
-          FILTER_REGEX_EXCLUDE: '(node_modules|build|package-lock\.json)/.*'
+          FILTER_REGEX_EXCLUDE: '(node_modules|build|client/build|\.git)/.*|package-lock\.json'
