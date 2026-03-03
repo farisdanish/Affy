@@ -62,7 +62,7 @@ Why this is next:
 ### Sprint 4 - Affiliate Layer
 - Commission tracking and calculation
 - Basic agent dashboard
-- Payment integration (Stripe/PayPal)
+- Payment integration (ToyyibPay/FPX/Stripe)
 
 ### Deferred
 - Admin dashboard/internal tooling
