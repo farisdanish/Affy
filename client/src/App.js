@@ -1,24 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import Dashboard from './pages/dashboard/Dashboard';
+
+// Redirect root path based on auth state
+const RootRedirect = () => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return null;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
+};
 
 const App = () => {
-  const [slots, setSlots] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/slots')
-      .then(response => setSlots(response.data))
-      .catch(error => console.error(error));
-  }, []);
-
   return (
-    <div>
-      <h1>Affy</h1>
-      <ul>
-        {slots.map(slot => (
-          <li key={slot._id}>{slot.title}</li>
-        ))}
-      </ul>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 
