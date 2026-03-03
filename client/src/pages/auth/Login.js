@@ -13,6 +13,19 @@ import {
 } from '@mui/material';
 import { Lock } from 'lucide-react';
 
+const inputSx = {
+    mb: 2,
+    '& .MuiOutlinedInput-root': {
+        borderRadius: 'var(--radius)',
+        color: 'var(--text)',
+        '& fieldset': { borderColor: 'var(--border)' },
+        '&:hover fieldset': { borderColor: 'var(--primary)' },
+        '&.Mui-focused fieldset': { borderColor: 'var(--primary)' },
+    },
+    '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
+    '& .MuiInputLabel-root.Mui-focused': { color: 'var(--primary)' },
+};
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,6 +58,7 @@ const Login = () => {
                 justifyContent: 'center',
                 background: 'var(--bg)',
                 padding: 3,
+                transition: 'background 0.3s ease',
             }}
         >
             <Card
@@ -54,7 +68,8 @@ const Login = () => {
                     background: 'var(--bg-card)',
                     border: '1px solid var(--border)',
                     borderRadius: 'var(--radius)',
-                    boxShadow: '0 4px 24px rgba(99, 102, 241, 0.1)',
+                    boxShadow: 'var(--shadow)',
+                    transition: 'background 0.3s ease, box-shadow 0.3s ease',
                 }}
             >
                 <CardContent sx={{ p: 4 }}>
@@ -64,7 +79,7 @@ const Login = () => {
                                 width: 56,
                                 height: 56,
                                 borderRadius: '50%',
-                                background: 'rgba(99, 102, 241, 0.15)',
+                                background: 'var(--primary-light)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -72,7 +87,7 @@ const Login = () => {
                                 mb: 2,
                             }}
                         >
-                            <Lock size={28} color="#6366f1" />
+                            <Lock size={28} style={{ color: 'var(--primary)' }} />
                         </Box>
                         <Typography
                             variant="h5"
@@ -103,18 +118,7 @@ const Login = () => {
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            sx={{
-                                mb: 2,
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: 'var(--radius)',
-                                    color: 'var(--text)',
-                                    '& fieldset': { borderColor: 'var(--border)' },
-                                    '&:hover fieldset': { borderColor: 'var(--primary)' },
-                                    '&.Mui-focused fieldset': { borderColor: 'var(--primary)' },
-                                },
-                                '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-                                '& .MuiInputLabel-root.Mui-focused': { color: 'var(--primary)' },
-                            }}
+                            sx={inputSx}
                         />
                         <TextField
                             id="login-password"
@@ -124,18 +128,7 @@ const Login = () => {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            sx={{
-                                mb: 3,
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: 'var(--radius)',
-                                    color: 'var(--text)',
-                                    '& fieldset': { borderColor: 'var(--border)' },
-                                    '&:hover fieldset': { borderColor: 'var(--primary)' },
-                                    '&.Mui-focused fieldset': { borderColor: 'var(--primary)' },
-                                },
-                                '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-                                '& .MuiInputLabel-root.Mui-focused': { color: 'var(--primary)' },
-                            }}
+                            sx={{ ...inputSx, mb: 3 }}
                         />
                         <Button
                             id="login-submit"

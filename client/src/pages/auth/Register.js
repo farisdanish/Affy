@@ -15,8 +15,6 @@ import {
 import { UserPlus } from 'lucide-react';
 import { REGISTRABLE_ROLES } from '../../config/roles';
 
-
-
 const inputSx = {
     mb: 2,
     '& .MuiOutlinedInput-root': {
@@ -64,6 +62,7 @@ const Register = () => {
                 justifyContent: 'center',
                 background: 'var(--bg)',
                 padding: 3,
+                transition: 'background 0.3s ease',
             }}
         >
             <Card
@@ -73,7 +72,8 @@ const Register = () => {
                     background: 'var(--bg-card)',
                     border: '1px solid var(--border)',
                     borderRadius: 'var(--radius)',
-                    boxShadow: '0 4px 24px rgba(99, 102, 241, 0.1)',
+                    boxShadow: 'var(--shadow)',
+                    transition: 'background 0.3s ease, box-shadow 0.3s ease',
                 }}
             >
                 <CardContent sx={{ p: 4 }}>
@@ -83,7 +83,7 @@ const Register = () => {
                                 width: 56,
                                 height: 56,
                                 borderRadius: '50%',
-                                background: 'rgba(99, 102, 241, 0.15)',
+                                background: 'var(--primary-light)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -91,7 +91,7 @@ const Register = () => {
                                 mb: 2,
                             }}
                         >
-                            <UserPlus size={28} color="#6366f1" />
+                            <UserPlus size={28} style={{ color: 'var(--primary)' }} />
                         </Box>
                         <Typography
                             variant="h5"
