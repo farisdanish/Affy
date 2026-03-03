@@ -135,6 +135,7 @@ Create `.env` in project root:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+HEALTHZ_TOKEN=your_healthz_token_optional
 ```
 
 Create `.env` in `client/` (or set in Vercel dashboard):
@@ -172,6 +173,7 @@ Default admin: `admin@affy.com` / `admin123`
 | Method | Path | Auth | Description |
 |---|---|---|---|
 | `GET` | `/` | Public | Health check |
+| `GET` | `/healthz` | Public* | Health check with MongoDB status (`HEALTHZ_TOKEN` protected when configured) |
 | `POST` | `/auth/register` | Public | Register a new user |
 | `POST` | `/auth/login` | Public | Login, returns JWT + user |
 | `GET` | `/slots` | Public | List all slots |
