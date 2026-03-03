@@ -25,6 +25,7 @@ mongoose.connect(process.env.MONGO_URI)
 require('../models/User');
 require('../models/Slot');
 require('../models/Booking');
+require('../models/ActivityLog');
 
 // Health check
 app.get('/', (req, res) => {
@@ -79,6 +80,8 @@ app.get('/healthz', async (req, res) => {
 // Routes
 app.use('/auth', require('../routes/auth'));
 app.use('/slots', require('../routes/slots'));
+app.use('/bookings', require('../routes/bookings'));
+app.use('/referrals', require('../routes/referrals'));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
