@@ -11,19 +11,15 @@
             "jsx": true
         }
     },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "rules": {
         "no-unused-vars": "warn",
-        "no-console": "off"
-    },
-    "overrides": [
-        {
-            "files": [
-                "client/**/*.js"
-            ],
-            "env": {
-                "browser": true,
-                "node": false
-            }
-        }
-    ]
+        "no-console": "off",
+        "react/prop-types": "off",
+        "react/no-unescaped-entities": "off"
+    }
 }
