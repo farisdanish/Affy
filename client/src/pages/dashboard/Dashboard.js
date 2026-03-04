@@ -11,23 +11,23 @@ import {
     Typography,
     Container
 } from '@mui/material';
-import { 
-    LayoutDashboard, 
-    Moon, 
-    Sun, 
-    LogOut, 
-    Calendar, 
-    Users, 
-    Link as LinkIcon, 
+import {
+    LayoutDashboard,
+    Moon,
+    Sun,
+    LogOut,
+    Calendar,
+    Users,
+    Link as LinkIcon,
     TrendingUp,
     ChevronRight
 } from 'lucide-react';
-import { 
-    AppButton, 
-    AppCard, 
-    StatsCard, 
-    AppAvatar, 
-    AppBadge 
+import {
+    AppButton,
+    AppCard,
+    StatsCard,
+    AppAvatar,
+    AppBadge
 } from '../../components/common';
 
 const actionTones = {
@@ -82,9 +82,9 @@ const Dashboard = () => {
     return (
         <Box sx={{ minHeight: '100vh', background: 'var(--bg)', pb: 8 }}>
             {/* Header */}
-            <Box 
-                sx={{ 
-                    borderBottom: '1px solid var(--border)', 
+            <Box
+                sx={{
+                    borderBottom: '1px solid var(--border)',
                     background: 'var(--bg-card)',
                     py: 2,
                     mb: 4
@@ -107,9 +107,9 @@ const Dashboard = () => {
                                     {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                                 </IconButton>
                             </Tooltip>
-                            <AppButton 
-                                variant="outlined" 
-                                size="small" 
+                            <AppButton
+                                variant="outlined"
+                                size="small"
                                 onClick={handleLogout}
                                 startIcon={LogOut}
                                 sx={{ borderRadius: '10px', display: { xs: 'none', sm: 'inline-flex' } }}
@@ -121,9 +121,9 @@ const Dashboard = () => {
                 </Container>
             </Box>
 
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 2, md: 3 } }}>
                 {/* Welcome Section */}
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
                     <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                         <AppAvatar name={user?.name} size={56} />
                         <Box>
@@ -141,7 +141,12 @@ const Dashboard = () => {
                 </Box>
 
                 {/* Stats Grid */}
-                <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: 5 }}>
+                <Grid
+                    container
+                    columnSpacing={{ xs: 0, sm: 2, md: 3 }}
+                    rowSpacing={{ xs: 2, md: 3 }}
+                    sx={{ mb: 5 }}
+                >
                     <Grid item xs={12} sm={6} md={3}>
                         <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
                     </Grid>
@@ -157,17 +162,22 @@ const Dashboard = () => {
                 </Grid>
 
                 {/* Quick Actions */}
-                <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'var(--text)' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'var(--text)', px: { xs: 2, sm: 0 } }}>
                     Quick Actions
                 </Typography>
-                <Grid container spacing={{ xs: 2, md: 3 }}>
+                <Grid
+                    container
+                    columnSpacing={{ xs: 2, md: 3 }}
+                    rowSpacing={{ xs: 2, md: 3 }}
+                    sx={{ px: { xs: 2, sm: 0 } }}
+                >
                     {getRoleActions().map((action, idx) => {
                         const tone = actionTones[action.color] || actionTones.primary;
                         return (
                             <Grid item xs={12} md={4} key={idx}>
-                                <AppCard 
-                                    sx={{ 
-                                        p: { xs: 2.5, md: 3 }, 
+                                <AppCard
+                                    sx={{
+                                        p: { xs: 2.5, md: 3 },
                                         minHeight: { xs: 188, md: 206 },
                                         height: '100%',
                                         display: 'flex',
