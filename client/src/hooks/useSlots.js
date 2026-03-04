@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import useAsyncState from './useAsyncState';
 
 const useSlots = (fetcher, { auto = true, initialData = [] } = {}) => {
-    const { data, loading, error, setError, run } = useAsyncState(initialData);
+    const { data, loading, error, run } = useAsyncState(initialData);
 
     const refetch = useCallback(async () => {
         try {
@@ -18,7 +18,7 @@ const useSlots = (fetcher, { auto = true, initialData = [] } = {}) => {
         }
     }, [auto, refetch]);
 
-    return { data, loading, error, refetch, setError };
+    return { data, loading, error, refetch };
 };
 
 export default useSlots;
