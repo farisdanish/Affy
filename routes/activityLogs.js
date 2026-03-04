@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ActivityLog = require('../models/ActivityLog');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { sendError } = require('../utils/apiError');
 
 // GET /activity-logs?page=1&limit=20&action=...&entityType=...
 router.get(
@@ -34,7 +35,7 @@ router.get(
                 totalPages: Math.ceil(total / limit) || 1,
             });
         } catch (err) {
-            return res.status(500).json({ message: err.message });
+            return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
         }
     }
 );

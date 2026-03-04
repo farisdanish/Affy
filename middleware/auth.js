@@ -8,7 +8,10 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
 
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
+        return res.status(401).json({
+            message: 'Access denied. No token provided.',
+            code: 'AUTH_TOKEN_MISSING',
+        });
     }
 
     try {
@@ -16,7 +19,10 @@ const authenticateToken = (req, res, next) => {
         req.user = decoded; // { id, role, iat, exp }
         next();
     } catch (err) {
-        return res.status(401).json({ message: 'Invalid or expired token.' });
+        return res.status(401).json({
+            message: 'Invalid or expired token.',
+            code: 'AUTH_TOKEN_INVALID',
+        });
     }
 };
 
@@ -29,7 +35,10 @@ const authenticateToken = (req, res, next) => {
 const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         if (!req.user || !roles.includes(req.user.role)) {
-            return res.status(403).json({ message: 'Forbidden. Insufficient permissions.' });
+            return res.status(403).json({
+                message: 'Forbidden. Insufficient permissions.',
+                code: 'FORBIDDEN',
+            });
         }
         next();
     };

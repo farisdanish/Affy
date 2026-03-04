@@ -7,6 +7,7 @@ const Slot = require('../models/Slot');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
 const { logActivity } = require('../services/activityLogService');
+const { sendError, sendValidationError } = require('../utils/apiError');
 
 // Rate limiting: 5 requests per 15 minutes per IP
 const bookingRateLimit = rateLimit({
@@ -39,12 +40,12 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
     // 1. Validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
+        return sendValidationError(res, errors.array());
     }
 
     // 2. Honeypot check — reject bots
     if (req.body._hp) {
-        return res.status(400).json({ message: 'Bad request' });
+        return sendError(res, 400, 'Bad request', 'HONEYPOT_TRIGGERED');
     }
 
     const { slotId, guestName, guestEmail } = req.body;
@@ -52,7 +53,7 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
     const bodyRef = typeof req.body.ref === 'string' ? req.body.ref.trim() : '';
 
     if (queryRef && bodyRef && queryRef !== bodyRef) {
-        return res.status(400).json({ message: 'Conflicting ref values between query and body' });
+        return sendError(res, 400, 'Conflicting ref values between query and body', 'REF_CONFLICT');
     }
 
     // Contract: query param is the primary source; body ref remains temporary fallback.
@@ -62,7 +63,7 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         // 3. Validate slot exists and is active
         const slot = await Slot.findById(slotId);
         if (!slot || slot.isActive === false) {
-            return res.status(404).json({ message: 'Slot not found or unavailable' });
+            return sendError(res, 404, 'Slot not found or unavailable', 'SLOT_UNAVAILABLE');
         }
 
         // 4. Resolve agentId server-side from refCode — never trust client
@@ -94,7 +95,7 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         // 6. Guest flow: require identity fields
         if (bookingType === 'guest') {
             if (!guestName || !guestEmail) {
-                return res.status(400).json({ message: 'guestName and guestEmail are required for guest bookings' });
+                return sendError(res, 400, 'guestName and guestEmail are required for guest bookings', 'GUEST_FIELDS_REQUIRED');
             }
         }
 
@@ -130,10 +131,10 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
     } catch (err) {
         // 8. Duplicate key → already booked with this email + slot
         if (err.code === 11000) {
-            return res.status(409).json({ message: 'A booking for this slot already exists for this email' });
+            return sendError(res, 409, 'A booking for this slot already exists for this email', 'DUPLICATE_BOOKING');
         }
         console.error('Booking error:', err);
-        return res.status(500).json({ message: 'Internal server error' });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 

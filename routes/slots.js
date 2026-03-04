@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const Slot = require('../models/Slot');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const { logActivity } = require('../services/activityLogService');
+const { sendError, sendValidationError } = require('../utils/apiError');
 
 // GET /slots/public — public, active + valid/future time window only
 router.get('/public', async (req, res) => {
@@ -33,7 +34,7 @@ router.get('/public', async (req, res) => {
 
         res.json(filtered);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 
@@ -46,7 +47,7 @@ router.get('/mine', authenticateToken, authorizeRoles('merchant', 'admin', 'deve
         const slots = await Slot.find(query).sort({ createdAt: -1 });
         res.json(slots);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 
@@ -56,7 +57,7 @@ router.get('/', authenticateToken, authorizeRoles('merchant', 'admin', 'develope
         const slots = await Slot.find();
         res.json(slots);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 
@@ -74,7 +75,7 @@ router.post(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
+            return sendValidationError(res, errors.array());
         }
         try {
             const { title, description, price, startTime, endTime, capacity, locationLabel } = req.body;
@@ -100,7 +101,7 @@ router.post(
             });
             res.status(201).json(slot);
         } catch (err) {
-            res.status(500).json({ message: err.message });
+            return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
         }
     }
 );
@@ -119,15 +120,15 @@ router.put(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
+            return sendValidationError(res, errors.array());
         }
         try {
             const slot = await Slot.findById(req.params.id);
-            if (!slot) return res.status(404).json({ message: 'Slot not found' });
+            if (!slot) return sendError(res, 404, 'Slot not found', 'SLOT_NOT_FOUND');
 
             // Owner check
             if (slot.merchant.toString() !== req.user.id && req.user.role !== 'admin' && req.user.role !== 'developer') {
-                return res.status(403).json({ message: 'Forbidden. You do not own this slot.' });
+                return sendError(res, 403, 'Forbidden. You do not own this slot.', 'SLOT_OWNERSHIP_REQUIRED');
             }
 
             const allowed = ['title', 'description', 'price', 'startTime', 'endTime', 'isActive', 'capacity', 'locationLabel'];
@@ -146,7 +147,7 @@ router.put(
             });
             res.json(slot);
         } catch (err) {
-            res.status(500).json({ message: err.message });
+            return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
         }
     }
 );
@@ -155,11 +156,11 @@ router.put(
 router.delete('/:id', authenticateToken, authorizeRoles('merchant', 'admin', 'developer'), async (req, res) => {
     try {
         const slot = await Slot.findById(req.params.id);
-        if (!slot) return res.status(404).json({ message: 'Slot not found' });
+        if (!slot) return sendError(res, 404, 'Slot not found', 'SLOT_NOT_FOUND');
 
         // Owner check
         if (slot.merchant.toString() !== req.user.id && req.user.role !== 'admin' && req.user.role !== 'developer') {
-            return res.status(403).json({ message: 'Forbidden. You do not own this slot.' });
+            return sendError(res, 403, 'Forbidden. You do not own this slot.', 'SLOT_OWNERSHIP_REQUIRED');
         }
 
         slot.isActive = false;
@@ -174,7 +175,7 @@ router.delete('/:id', authenticateToken, authorizeRoles('merchant', 'admin', 'de
         });
         res.json({ message: 'Slot deactivated', slot });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 

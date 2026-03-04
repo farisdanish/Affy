@@ -6,13 +6,14 @@ const User = require('../models/User');
 const Slot = require('../models/Slot');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const { logActivity } = require('../services/activityLogService');
+const { sendError, sendValidationError } = require('../utils/apiError');
 
 // GET /referrals/my-code — agent only
 // Returns existing refCode or generates one on first call
 router.get('/my-code', authenticateToken, authorizeRoles('agent'), async (req, res) => {
     try {
         let user = await User.findById(req.user.id);
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (!user) return sendError(res, 404, 'User not found', 'USER_NOT_FOUND');
 
         if (!user.refCode) {
             // Generate a unique 8-char URL-safe code
@@ -28,7 +29,7 @@ router.get('/my-code', authenticateToken, authorizeRoles('agent'), async (req, r
 
         res.json({ refCode: user.refCode });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
 });
 
@@ -42,7 +43,7 @@ router.post(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
+            return sendValidationError(res, errors.array());
         }
 
         try {
@@ -50,7 +51,7 @@ router.post(
 
             const slot = await Slot.findById(slotId);
             if (!slot || slot.isActive === false) {
-                return res.status(404).json({ message: 'Slot not found or unavailable' });
+                return sendError(res, 404, 'Slot not found or unavailable', 'SLOT_UNAVAILABLE');
             }
 
             let user = await User.findById(req.user.id);
@@ -83,7 +84,7 @@ router.post(
 
             res.json({ shareUrl, refCode: user.refCode, slotId });
         } catch (err) {
-            res.status(500).json({ message: err.message });
+            return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
         }
     }
 );

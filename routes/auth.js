@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
+const { sendError, sendValidationError } = require('../utils/apiError');
 
 const SELF_REGISTRABLE_ROLES = ['user', 'merchant', 'agent'];
 
@@ -36,7 +37,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
+      return sendValidationError(res, errors.array());
     }
 
     try {
@@ -45,7 +46,7 @@ router.post(
 
       // Check if user already exists
       const existing = await User.findOne({ email });
-      if (existing) return res.status(400).json({ message: 'Email already registered' });
+      if (existing) return sendError(res, 400, 'Email already registered', 'EMAIL_ALREADY_REGISTERED');
 
       // Hash the password
       const hashed = await bcrypt.hash(password, 10);
@@ -56,7 +57,7 @@ router.post(
 
       res.json({ message: 'User registered successfully' });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
     }
   }
 );
@@ -66,20 +67,20 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body || {};
     if (!email || !password) {
-      return res.status(400).json({ message: 'email and password are required' });
+      return sendError(res, 400, 'email and password are required', 'MISSING_CREDENTIALS');
     }
 
     // Find user
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user) return sendError(res, 400, 'Invalid credentials', 'INVALID_CREDENTIALS');
 
     // Check password
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!match) return sendError(res, 400, 'Invalid credentials', 'INVALID_CREDENTIALS');
 
     // Sign JWT
     if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ message: 'JWT_SECRET is not configured' });
+      return sendError(res, 500, 'JWT_SECRET is not configured', 'SERVER_MISCONFIG');
     }
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -89,7 +90,7 @@ router.post('/login', async (req, res) => {
 
     res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
   }
 });
 
