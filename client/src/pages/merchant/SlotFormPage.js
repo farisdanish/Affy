@@ -86,9 +86,9 @@ const SlotFormPage = () => {
     };
 
     return (
-        <AppCard sx={{ maxWidth: 760 }}>
+        <AppCard sx={{ maxWidth: 760, mx: 'auto' }}>
             <CardContent>
-                <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
+                <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, color: 'var(--text)' }}>
                     {isEdit ? 'Edit Slot' : 'Create Slot'}
                 </Typography>
                 {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -101,7 +101,7 @@ const SlotFormPage = () => {
                         <AppInput label="End Time" type="datetime-local" value={form.endTime} onChange={handleChange('endTime')} InputLabelProps={{ shrink: true }} />
                         <AppInput label="Capacity" type="number" value={form.capacity} onChange={handleChange('capacity')} />
                         <AppInput label="Location Label" value={form.locationLabel} onChange={handleChange('locationLabel')} />
-                        <Stack direction="row" spacing={1}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
                             <AppButton type="submit" disabled={loading}>
                                 {loading ? 'Saving...' : 'Save Slot'}
                             </AppButton>

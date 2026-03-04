@@ -42,7 +42,16 @@ const SlotListPage = () => {
 
     return (
         <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    gap: 2,
+                    mb: 4,
+                }}
+            >
                 <Box>
                     <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)' }}>
                         {isAdminScope ? 'All Slots' : 'My Slots'}
@@ -57,6 +66,7 @@ const SlotListPage = () => {
                     component={Link} 
                     to="/workspace/slots/new"
                     startIcon={Plus}
+                    sx={{ alignSelf: { xs: 'stretch', sm: 'auto' } }}
                 >
                     New Slot
                 </AppButton>
@@ -100,7 +110,7 @@ const SlotListPage = () => {
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
-                                                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                                <Typography variant="h6" sx={{ fontWeight: 600, color: 'var(--text)' }}>
                                                     {slot.title}
                                                 </Typography>
                                                 <AppBadge 
@@ -115,17 +125,21 @@ const SlotListPage = () => {
                                             <Stack direction="row" spacing={2} sx={{ color: 'var(--text-muted)' }}>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <Clock size={14} />
-                                                    <Typography variant="caption">
+                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
                                                         {slot.startTime ? new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                                                     </Typography>
                                                 </Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <MapPin size={14} />
-                                                    <Typography variant="caption">{slot.locationLabel || 'Remote'}</Typography>
+                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                                                        {slot.locationLabel || 'Remote'}
+                                                    </Typography>
                                                 </Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <DollarSign size={14} />
-                                                    <Typography variant="caption">{slot.price || 0}</Typography>
+                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                                                        {slot.price || 0}
+                                                    </Typography>
                                                 </Stack>
                                             </Stack>
                                         </Stack>

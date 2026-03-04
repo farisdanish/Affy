@@ -21,6 +21,7 @@
   --border: rgba(41, 37, 36, 0.12);
   --radius: 12px;
   --shadow: 0 4px 24px rgba(249, 115, 22, 0.1);
+  --primary-shadow: rgba(249, 115, 22, 0.3);
 }
 
 /* ============================================
@@ -37,6 +38,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --radius: 12px;
   --shadow: 0 4px 24px rgba(99, 102, 241, 0.1);
+  --primary-shadow: rgba(99, 102, 241, 0.35);
 }
 
 body {

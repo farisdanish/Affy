@@ -24,11 +24,11 @@ const AppButton = ({
                 ? {
                     background: 'var(--primary)',
                     color: '#fff',
-                    boxShadow: '0 4px 12px rgba(249, 115, 22, 0.25)',
+                    boxShadow: '0 4px 12px var(--primary-shadow)',
                     '&:hover': { 
                         background: 'var(--primary-hover)',
                         transform: 'translateY(-1px)',
-                        boxShadow: '0 6px 16px rgba(249, 115, 22, 0.35)',
+                        boxShadow: '0 6px 16px var(--primary-shadow)',
                     },
                     '&:active': { transform: 'translateY(0)' },
                 }

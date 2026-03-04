@@ -30,6 +30,12 @@ import {
     AppBadge 
 } from '../../components/common';
 
+const actionTones = {
+    primary: { icon: 'var(--primary)', bg: 'var(--primary-light)' },
+    success: { icon: '#16a34a', bg: 'rgba(34, 197, 94, 0.12)' },
+    info: { icon: '#2563eb', bg: 'rgba(59, 130, 246, 0.12)' },
+};
+
 const Dashboard = () => {
     const { user, logout } = useAuth();
     const { mode, toggleTheme } = useTheme();
@@ -85,7 +91,7 @@ const Dashboard = () => {
                 }}
             >
                 <Container maxWidth="lg">
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
                         <Stack direction="row" spacing={1.5} alignItems="center">
                             <Box sx={{ color: 'var(--primary)', display: 'flex' }}>
                                 <LayoutDashboard size={28} />
@@ -106,7 +112,7 @@ const Dashboard = () => {
                                 size="small" 
                                 onClick={handleLogout}
                                 startIcon={LogOut}
-                                sx={{ borderRadius: '10px' }}
+                                sx={{ borderRadius: '10px', display: { xs: 'none', sm: 'inline-flex' } }}
                             >
                                 Logout
                             </AppButton>
@@ -121,7 +127,7 @@ const Dashboard = () => {
                     <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                         <AppAvatar name={user?.name} size={56} />
                         <Box>
-                            <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)' }}>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)', lineHeight: 1.15 }}>
                                 Hello, {user?.name?.split(' ')[0] || 'User'}!
                             </Typography>
                             <Stack direction="row" spacing={1} alignItems="center">
@@ -135,7 +141,7 @@ const Dashboard = () => {
                 </Box>
 
                 {/* Stats Grid */}
-                <Grid container spacing={3} sx={{ mb: 5 }}>
+                <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mb: 5 }}>
                     <Grid item xs={12} sm={6} md={3}>
                         <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
                     </Grid>
@@ -154,48 +160,51 @@ const Dashboard = () => {
                 <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'var(--text)' }}>
                     Quick Actions
                 </Typography>
-                <Grid container spacing={3}>
-                    {getRoleActions().map((action, idx) => (
-                        <Grid item xs={12} md={4} key={idx}>
-                            <AppCard 
-                                sx={{ 
-                                    p: 3, 
-                                    cursor: 'pointer',
-                                    transition: 'transform 0.2s ease, border-color 0.2s ease',
-                                    '&:hover': {
-                                        transform: 'translateY(-4px)',
-                                        borderColor: 'var(--primary)',
-                                    }
-                                }}
-                                onClick={() => navigate(action.path)}
-                            >
-                                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                                    <Box
-                                        sx={{
-                                            width: 44,
-                                            height: 44,
-                                            borderRadius: '10px',
-                                            background: `var(--${action.color === 'primary' ? 'primary' : action.color}-light)`,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            color: action.color === 'primary' ? 'var(--primary)' : action.color,
-                                            mb: 2
-                                        }}
-                                    >
-                                        <action.icon size={22} />
-                                    </Box>
-                                    <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
-                                </Stack>
-                                <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-                                    {action.title}
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                    {action.description}
-                                </Typography>
-                            </AppCard>
-                        </Grid>
-                    ))}
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                    {getRoleActions().map((action, idx) => {
+                        const tone = actionTones[action.color] || actionTones.primary;
+                        return (
+                            <Grid item xs={12} md={4} key={idx}>
+                                <AppCard 
+                                    sx={{ 
+                                        p: { xs: 2.5, md: 3 }, 
+                                        cursor: 'pointer',
+                                        transition: 'transform 0.2s ease, border-color 0.2s ease',
+                                        '&:hover': {
+                                            transform: 'translateY(-4px)',
+                                            borderColor: 'var(--primary)',
+                                        }
+                                    }}
+                                    onClick={() => navigate(action.path)}
+                                >
+                                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                                        <Box
+                                            sx={{
+                                                width: 44,
+                                                height: 44,
+                                                borderRadius: '10px',
+                                                background: tone.bg,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                color: tone.icon,
+                                                mb: 2
+                                            }}
+                                        >
+                                            <action.icon size={22} />
+                                        </Box>
+                                        <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                                    </Stack>
+                                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5, color: 'var(--text)' }}>
+                                        {action.title}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                        {action.description}
+                                    </Typography>
+                                </AppCard>
+                            </Grid>
+                        );
+                    })}
                 </Grid>
             </Container>
         </Box>

@@ -14,9 +14,9 @@ const EmptyState = ({
         sx={{
             border: '1px dashed var(--border)',
             borderRadius: 'var(--radius)',
-            p: 6,
+            p: { xs: 4, md: 6 },
             textAlign: 'center',
-            background: 'rgba(249, 115, 22, 0.02)',
+            background: 'var(--primary-light)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
