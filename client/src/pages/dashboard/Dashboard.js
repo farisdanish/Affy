@@ -20,7 +20,6 @@ import {
     Users, 
     Link as LinkIcon, 
     TrendingUp,
-    Settings,
     ChevronRight
 } from 'lucide-react';
 import { 

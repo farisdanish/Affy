@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, Box, Stack, Typography, Grid, Tooltip, IconButton } from '@mui/material';
 import { 
-    Link as LinkIcon, 
     Copy, 
     ExternalLink, 
     CheckCircle, 
@@ -18,12 +17,11 @@ import {
     AppButton, 
     AppCard, 
     LoadingSpinner, 
-    AppBadge,
     EmptyState
 } from '../../components/common';
 
 const ReferralPage = () => {
-    const { data: refData, loading: refLoading, error: refError, refetch: refetchCode } = useReferrals(getMyRefCode, { auto: true });
+    const { data: refData, loading: refLoading, refetch: refetchCode } = useReferrals(getMyRefCode, { auto: true });
     const { data: slots = [], loading: slotsLoading, error: slotsError } = useSlots(getPublicSlots, { auto: true, initialData: [] });
     const [generatedLinks, setGeneratedLinks] = useState({});
     const [actionError, setActionError] = useState('');
