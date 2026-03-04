@@ -42,7 +42,7 @@ jobs:
           cache-dependency-path: client/package-lock.json
 
       - name: Install client dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
         working-directory: ./client
 
       - name: Build client
@@ -83,7 +83,7 @@ jobs:
           cache-dependency-path: client/package-lock.json
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
         working-directory: ./client
 
       - name: Frontend audit (high+)
