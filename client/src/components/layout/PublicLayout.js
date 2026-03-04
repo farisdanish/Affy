@@ -1,17 +1,36 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
+import { Moon, Sun } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const PublicLayout = () => {
     const { isAuthenticated } = useAuth();
+    const { mode, toggleTheme } = useTheme();
 
     return (
         <Box sx={{ minHeight: '100vh', background: 'var(--bg)' }}>
-            <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: '1px solid var(--border)' }}>
+            <AppBar
+                position="static"
+                color="transparent"
+                elevation={0}
+                sx={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-card)' }}
+            >
                 <Toolbar sx={{ gap: 2 }}>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>Affy</Typography>
                     <Button component={Link} to="/slots" color="inherit">Slots</Button>
+                    <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+                        <IconButton
+                            onClick={toggleTheme}
+                            sx={{
+                                color: 'var(--text-muted)',
+                                '&:hover': { color: 'var(--primary)', background: 'var(--primary-light)' },
+                            }}
+                        >
+                            {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                        </IconButton>
+                    </Tooltip>
                     {isAuthenticated ? (
                         <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button>
                     ) : (
