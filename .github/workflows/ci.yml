@@ -7,26 +7,42 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  backend-smoke:
+    name: Backend Smoke
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18, 20]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install backend dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Run backend smoke test
+        run: npm run smoke:backend
+
+  frontend-smoke:
+    name: Frontend Smoke
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: client/package-lock.json
 
       - name: Install client dependencies
-        run: npm install
+        run: npm ci
         working-directory: ./client
 
       - name: Build client
@@ -34,6 +50,45 @@ jobs:
         working-directory: ./client
         env:
           CI: true
+
+      - name: Run frontend tests (pass if none)
+        run: CI=true npm test -- --watchAll=false --passWithNoTests
+        working-directory: ./client
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20 (backend)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Backend audit (high+)
+        run: npm audit --audit-level=high
+
+      - name: Use Node.js 20 (frontend)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: ./client
+
+      - name: Frontend audit (high+)
+        run: npm audit --audit-level=high
+        working-directory: ./client
 
   lint:
     name: Lint Code
