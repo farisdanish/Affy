@@ -8,6 +8,7 @@ const Booking = require('../models/Booking');
 const User = require('../models/User');
 const { logActivity } = require('../services/activityLogService');
 const { sendError, sendValidationError } = require('../utils/apiError');
+const { REF_CODE_REGEX, resolveRefInput } = require('../utils/bookingRef');
 
 // Rate limiting: 5 requests per 15 minutes per IP
 const bookingRateLimit = rateLimit({
@@ -26,12 +27,12 @@ const bookingValidation = [
     query('ref')
         .optional()
         .trim()
-        .matches(/^[A-Za-z0-9_-]{1,32}$/)
+        .matches(REF_CODE_REGEX)
         .withMessage('ref must be URL-safe and 1-32 chars'),
     body('ref')
         .optional()
         .trim()
-        .matches(/^[A-Za-z0-9_-]{1,32}$/)
+        .matches(REF_CODE_REGEX)
         .withMessage('ref must be URL-safe and 1-32 chars'),
 ];
 
@@ -49,15 +50,13 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
     }
 
     const { slotId, guestName, guestEmail } = req.body;
-    const queryRef = typeof req.query.ref === 'string' ? req.query.ref.trim() : '';
-    const bodyRef = typeof req.body.ref === 'string' ? req.body.ref.trim() : '';
-
-    if (queryRef && bodyRef && queryRef !== bodyRef) {
+    const refResolution = resolveRefInput({ queryRef: req.query.ref, bodyRef: req.body.ref });
+    if (refResolution.error === 'REF_CONFLICT') {
         return sendError(res, 400, 'Conflicting ref values between query and body', 'REF_CONFLICT');
     }
 
     // Contract: query param is the primary source; body ref remains temporary fallback.
-    const resolvedRefInput = queryRef || bodyRef || null;
+    const resolvedRefInput = refResolution.ref;
 
     try {
         // 3. Validate slot exists and is active

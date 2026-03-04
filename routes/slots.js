@@ -5,32 +5,14 @@ const Slot = require('../models/Slot');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const { logActivity } = require('../services/activityLogService');
 const { sendError, sendValidationError } = require('../utils/apiError');
+const { buildPublicSlotsQuery, isValidSlotWindow } = require('../utils/slotVisibility');
 
 // GET /slots/public — public, active + valid/future time window only
 router.get('/public', async (req, res) => {
     try {
         const now = new Date();
-        const slots = await Slot.find({
-            isActive: true,
-            $or: [
-                // New model: show ongoing or future windows by endTime.
-                { endTime: { $gte: now } },
-                // Partial new model fallback: no endTime but future startTime.
-                { endTime: { $exists: false }, startTime: { $gte: now } },
-                { endTime: null, startTime: { $gte: now } },
-                // Legacy model fallback: date-only future slots.
-                { startTime: { $exists: false }, endTime: { $exists: false }, date: { $gte: now } },
-                { startTime: null, endTime: null, date: { $gte: now } },
-            ],
-        }).sort({ startTime: 1, date: 1 });
-
-        // Final guard for invalid windows: if both times exist, enforce start <= end.
-        const filtered = slots.filter((slot) => {
-            if (slot.startTime && slot.endTime) {
-                return slot.startTime <= slot.endTime;
-            }
-            return true;
-        });
+        const slots = await Slot.find(buildPublicSlotsQuery(now)).sort({ startTime: 1, date: 1 });
+        const filtered = slots.filter(isValidSlotWindow);
 
         res.json(filtered);
     } catch (err) {

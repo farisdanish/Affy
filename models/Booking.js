@@ -21,13 +21,13 @@ const bookingSchema = new mongoose.Schema({
 // Exactly one mode is valid:
 // - guest: user must be null and guestName/guestEmail are required
 // - authenticated: user is required and guestName/guestEmail must be empty
-bookingSchema.pre('validate', function enforceIdentityMode(next) {
+bookingSchema.pre('validate', function enforceIdentityMode() {
     const isGuest = this.bookingType === 'guest';
     const isAuthenticated = this.bookingType === 'authenticated';
 
     if (!isGuest && !isAuthenticated) {
         this.invalidate('bookingType', 'bookingType must be guest or authenticated');
-        return next();
+        return;
     }
 
     if (isGuest) {
@@ -54,7 +54,6 @@ bookingSchema.pre('validate', function enforceIdentityMode(next) {
         }
     }
 
-    return next();
 });
 
 // One guest booking per slot per email (sparse: authenticated bookings have no guestEmail)

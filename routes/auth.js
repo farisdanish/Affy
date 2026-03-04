@@ -5,8 +5,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const { sendError, sendValidationError } = require('../utils/apiError');
-
-const SELF_REGISTRABLE_ROLES = ['user', 'merchant', 'agent'];
+const { SELF_REGISTRABLE_ROLES, sanitizeSelfRegistrationRole } = require('../utils/authRegistration');
 
 // POST /auth/register
 router.post(
@@ -42,7 +41,7 @@ router.post(
 
     try {
       const { name, email, password, role } = req.body || {};
-      const safeRole = role || 'user';
+      const safeRole = sanitizeSelfRegistrationRole(role);
 
       // Check if user already exists
       const existing = await User.findOne({ email });
