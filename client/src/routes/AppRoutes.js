@@ -5,6 +5,15 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
+import Unauthorized from '../pages/common/Unauthorized';
+import MerchantLayout from '../components/layout/MerchantLayout';
+import AgentLayout from '../components/layout/AgentLayout';
+import PublicLayout from '../components/layout/PublicLayout';
+import SlotListPage from '../pages/merchant/SlotListPage';
+import SlotFormPage from '../pages/merchant/SlotFormPage';
+import ReferralPage from '../pages/agent/ReferralPage';
+import SlotCatalogPage from '../pages/public/SlotCatalogPage';
+import BookSlotPage from '../pages/public/BookSlotPage';
 
 // Redirect root path based on auth state
 const RootRedirect = () => {
@@ -17,6 +26,13 @@ const AppRoutes = () => (
     <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        <Route element={<PublicLayout />}>
+            <Route path="/slots" element={<SlotCatalogPage />} />
+            <Route path="/book/:slotId" element={<BookSlotPage />} />
+        </Route>
+
         <Route
             path="/dashboard"
             element={
@@ -25,6 +41,31 @@ const AppRoutes = () => (
                 </ProtectedRoute>
             }
         />
+
+        <Route
+            path="/merchant"
+            element={
+                <ProtectedRoute allowedRoles={['merchant', 'admin', 'developer']}>
+                    <MerchantLayout />
+                </ProtectedRoute>
+            }
+        >
+            <Route path="slots" element={<SlotListPage />} />
+            <Route path="slots/new" element={<SlotFormPage />} />
+            <Route path="slots/:id/edit" element={<SlotFormPage />} />
+        </Route>
+
+        <Route
+            path="/agent"
+            element={
+                <ProtectedRoute allowedRoles={['agent']}>
+                    <AgentLayout />
+                </ProtectedRoute>
+            }
+        >
+            <Route path="referrals" element={<ReferralPage />} />
+        </Route>
+
         <Route path="/" element={<RootRedirect />} />
         <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
