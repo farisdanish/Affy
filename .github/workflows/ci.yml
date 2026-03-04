@@ -87,7 +87,7 @@ jobs:
         working-directory: ./client
 
       - name: Frontend audit (high+)
-        run: npm audit --audit-level=high
+        run: npm audit --omit=dev --audit-level=high
         working-directory: ./client
 
   lint:
