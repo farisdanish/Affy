@@ -77,7 +77,7 @@ const SlotFormPage = () => {
             } else {
                 await createSlot(payload);
             }
-            navigate('/merchant/slots');
+            navigate('/workspace/slots');
         } catch (err) {
             setError(err?.response?.data?.message || err.message);
         } finally {
@@ -105,7 +105,7 @@ const SlotFormPage = () => {
                             <AppButton type="submit" disabled={loading}>
                                 {loading ? 'Saving...' : 'Save Slot'}
                             </AppButton>
-                            <AppButton variant="outlined" onClick={() => navigate('/merchant/slots')}>
+                            <AppButton variant="outlined" onClick={() => navigate('/workspace/slots')}>
                                 Cancel
                             </AppButton>
                         </Stack>

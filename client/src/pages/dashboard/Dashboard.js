@@ -118,7 +118,7 @@ const Dashboard = () => {
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
                         {(role === 'merchant' || role === 'admin' || role === 'developer') && (
-                            <Button variant="contained" onClick={() => navigate('/merchant/slots')}>
+                            <Button variant="contained" onClick={() => navigate('/workspace/slots')}>
                                 Manage Slots
                             </Button>
                         )}

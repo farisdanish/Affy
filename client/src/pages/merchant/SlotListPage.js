@@ -29,7 +29,7 @@ const SlotListPage = () => {
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                     {isAdminScope ? 'All Slots' : 'My Slots'}
                 </Typography>
-                <AppButton component={Link} to="/merchant/slots/new">New Slot</AppButton>
+                <AppButton component={Link} to="/workspace/slots/new">New Slot</AppButton>
             </Box>
 
             {loading && <LoadingSpinner />}
@@ -61,7 +61,7 @@ const SlotListPage = () => {
                                 </Box>
                             </Box>
                             <Stack direction="row" spacing={1}>
-                                <AppButton variant="outlined" onClick={() => navigate(`/merchant/slots/${slot._id}/edit`)}>
+                                <AppButton variant="outlined" onClick={() => navigate(`/workspace/slots/${slot._id}/edit`)}>
                                     Edit
                                 </AppButton>
                                 <AppButton

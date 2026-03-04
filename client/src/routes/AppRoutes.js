@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/auth/Login';
@@ -20,6 +20,11 @@ const RootRedirect = () => {
     const { isAuthenticated, loading } = useAuth();
     if (loading) return null;
     return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
+};
+
+const MerchantEditRedirect = () => {
+    const { id } = useParams();
+    return <Navigate to={`/workspace/slots/${id}/edit`} replace />;
 };
 
 const AppRoutes = () => (
@@ -43,7 +48,7 @@ const AppRoutes = () => (
         />
 
         <Route
-            path="/merchant"
+            path="/workspace"
             element={
                 <ProtectedRoute allowedRoles={['merchant', 'admin', 'developer']}>
                     <MerchantLayout />
@@ -54,6 +59,12 @@ const AppRoutes = () => (
             <Route path="slots/new" element={<SlotFormPage />} />
             <Route path="slots/:id/edit" element={<SlotFormPage />} />
         </Route>
+
+        {/* Legacy compatibility redirects */}
+        <Route path="/merchant" element={<Navigate to="/workspace/slots" replace />} />
+        <Route path="/merchant/slots" element={<Navigate to="/workspace/slots" replace />} />
+        <Route path="/merchant/slots/new" element={<Navigate to="/workspace/slots/new" replace />} />
+        <Route path="/merchant/slots/:id/edit" element={<MerchantEditRedirect />} />
 
         <Route
             path="/agent"
