@@ -15,6 +15,7 @@ const BookSlotPage = () => {
     const [success, setSuccess] = useState('');
     const [guestName, setGuestName] = useState('');
     const [guestEmail, setGuestEmail] = useState('');
+    const [honeypot, setHoneypot] = useState('');
 
     const refCode = useMemo(() => searchParams.get('ref') || '', [searchParams]);
 
@@ -23,7 +24,7 @@ const BookSlotPage = () => {
         setSuccess('');
         const payload = {
             slotId,
-            ...(refCode ? { ref: refCode } : {}),
+            _hp: honeypot,
         };
 
         if (!isAuthenticated) {
@@ -31,7 +32,7 @@ const BookSlotPage = () => {
             payload.guestEmail = guestEmail;
         }
 
-        const result = await refetch(() => createBooking(payload));
+        const result = await refetch(() => createBooking(payload, refCode));
         if (result?.booking?._id) {
             setSuccess('Booking created. Status is pending.');
         }
@@ -53,6 +54,24 @@ const BookSlotPage = () => {
                 {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
                 <Box component="form" onSubmit={handleSubmit}>
                     <Stack spacing={2}>
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                left: '-9999px',
+                                width: 1,
+                                height: 1,
+                                overflow: 'hidden',
+                            }}
+                            aria-hidden="true"
+                        >
+                            <AppInput
+                                label="Website"
+                                value={honeypot}
+                                onChange={(e) => setHoneypot(e.target.value)}
+                                tabIndex={-1}
+                                autoComplete="off"
+                            />
+                        </Box>
                         {!isAuthenticated && (
                             <>
                                 <AppInput

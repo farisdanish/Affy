@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
+const { body, query, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Slot = require('../models/Slot');
 const Booking = require('../models/Booking');
@@ -22,6 +22,16 @@ const bookingValidation = [
     body('slotId').notEmpty().isMongoId().withMessage('Valid slotId is required'),
     body('guestName').optional().trim().notEmpty().withMessage('guestName cannot be blank'),
     body('guestEmail').optional().trim().normalizeEmail().isEmail().withMessage('Valid guestEmail is required for guest booking'),
+    query('ref')
+        .optional()
+        .trim()
+        .matches(/^[A-Za-z0-9_-]{1,32}$/)
+        .withMessage('ref must be URL-safe and 1-32 chars'),
+    body('ref')
+        .optional()
+        .trim()
+        .matches(/^[A-Za-z0-9_-]{1,32}$/)
+        .withMessage('ref must be URL-safe and 1-32 chars'),
 ];
 
 // POST /bookings — public (guest) or authenticated
@@ -37,7 +47,16 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         return res.status(400).json({ message: 'Bad request' });
     }
 
-    const { slotId, guestName, guestEmail, ref } = req.body;
+    const { slotId, guestName, guestEmail } = req.body;
+    const queryRef = typeof req.query.ref === 'string' ? req.query.ref.trim() : '';
+    const bodyRef = typeof req.body.ref === 'string' ? req.body.ref.trim() : '';
+
+    if (queryRef && bodyRef && queryRef !== bodyRef) {
+        return res.status(400).json({ message: 'Conflicting ref values between query and body' });
+    }
+
+    // Contract: query param is the primary source; body ref remains temporary fallback.
+    const resolvedRefInput = queryRef || bodyRef || null;
 
     try {
         // 3. Validate slot exists and is active
@@ -49,9 +68,9 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         // 4. Resolve agentId server-side from refCode — never trust client
         let resolvedAgentId = null;
         let resolvedRefCode = null;
-        if (ref) {
-            resolvedRefCode = ref;
-            const agent = await User.findOne({ refCode: ref, role: 'agent' });
+        if (resolvedRefInput) {
+            resolvedRefCode = resolvedRefInput;
+            const agent = await User.findOne({ refCode: resolvedRefInput, role: 'agent' });
             if (agent) resolvedAgentId = agent._id;
         }
 
@@ -88,7 +107,7 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
             guestEmail: bookingType === 'guest' ? guestEmail : undefined,
             refCode: resolvedRefCode,
             agentId: resolvedAgentId,
-            attributionSource: ref ? 'query_param' : undefined,
+            attributionSource: resolvedRefCode ? 'query_param' : undefined,
             status: 'pending',  // always server-set
         });
 
