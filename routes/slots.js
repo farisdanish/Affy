@@ -18,7 +18,10 @@ router.get('/public', async (req, res) => {
 // GET /slots/mine — authenticated merchant/admin/developer scope
 router.get('/mine', authenticateToken, authorizeRoles('merchant', 'admin', 'developer'), async (req, res) => {
     try {
-        const slots = await Slot.find({ merchant: req.user.id }).sort({ createdAt: -1 });
+        const query = req.user.role === 'admin' || req.user.role === 'developer'
+            ? {}
+            : { merchant: req.user.id };
+        const slots = await Slot.find(query).sort({ createdAt: -1 });
         res.json(slots);
     } catch (err) {
         res.status(500).json({ message: err.message });

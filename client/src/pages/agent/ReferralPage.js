@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Box, Button, Card, CardContent, Chip, CircularProgress, Stack, Typography } from '@mui/material';
+import { Alert, Box, CardContent, Chip, Stack, Typography } from '@mui/material';
 import useReferrals from '../../hooks/useReferrals';
 import useSlots from '../../hooks/useSlots';
 import { getMyRefCode, generateReferralLink } from '../../services/referralsService';
 import { getPublicSlots } from '../../services/slotsService';
+import { AppButton, AppCard, LoadingSpinner } from '../../components/common';
 
 const ReferralPage = () => {
     const { data: refData, loading: refLoading, error: refError, refetch: refetchCode } = useReferrals(getMyRefCode, { auto: true });
@@ -33,35 +34,35 @@ const ReferralPage = () => {
     return (
         <Box>
             <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>Referral Links</Typography>
-            <Card sx={{ mb: 3, border: '1px solid var(--border)' }}>
+            <AppCard sx={{ mb: 3 }}>
                 <CardContent>
                     <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>Your referral code</Typography>
-                    {refLoading ? <CircularProgress size={20} /> : <Chip label={refCode} color="primary" sx={{ mt: 1 }} />}
+                    {refLoading ? <LoadingSpinner /> : <Chip label={refCode} color="primary" sx={{ mt: 1 }} />}
                     {refError && <Alert severity="error" sx={{ mt: 2 }}>{refError}</Alert>}
                 </CardContent>
-            </Card>
+            </AppCard>
 
             {actionError && <Alert severity="error" sx={{ mb: 2 }}>{actionError}</Alert>}
-            {slotsLoading && <CircularProgress />}
+            {slotsLoading && <LoadingSpinner />}
             {slotsError && <Alert severity="error">{slotsError}</Alert>}
 
             <Stack spacing={2}>
                 {slots.map((slot) => {
                     const link = generatedLinks[slot._id];
                     return (
-                        <Card key={slot._id} sx={{ border: '1px solid var(--border)' }}>
+                        <AppCard key={slot._id}>
                             <CardContent>
                                 <Typography variant="h6">{slot.title}</Typography>
                                 <Typography variant="body2" sx={{ mb: 1, color: 'var(--text-muted)' }}>
                                     {slot.description || 'No description'}
                                 </Typography>
                                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                                    <Button variant="contained" onClick={() => handleGenerate(slot._id)}>
+                                    <AppButton onClick={() => handleGenerate(slot._id)}>
                                         Generate Link
-                                    </Button>
+                                    </AppButton>
                                     {link && (
                                         <>
-                                            <Button variant="outlined" onClick={() => handleCopy(link)}>Copy Link</Button>
+                                            <AppButton variant="outlined" onClick={() => handleCopy(link)}>Copy Link</AppButton>
                                             <Typography variant="body2" sx={{ alignSelf: 'center', wordBreak: 'break-all' }}>
                                                 {link}
                                             </Typography>
@@ -69,7 +70,7 @@ const ReferralPage = () => {
                                     )}
                                 </Stack>
                             </CardContent>
-                        </Card>
+                        </AppCard>
                     );
                 })}
             </Stack>

@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Alert, Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, CardContent, Stack, Typography } from '@mui/material';
 import useBookings from '../../hooks/useBookings';
 import { createBooking } from '../../services/bookingsService';
 import { useAuth } from '../../context/AuthContext';
+import { AppButton, AppCard, AppInput } from '../../components/common';
 
 const BookSlotPage = () => {
     const { slotId } = useParams();
@@ -37,7 +38,7 @@ const BookSlotPage = () => {
     };
 
     return (
-        <Card sx={{ maxWidth: 640, border: '1px solid var(--border)' }}>
+        <AppCard sx={{ maxWidth: 640 }}>
             <CardContent>
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>Book Slot</Typography>
                 <Typography variant="body2" sx={{ mb: 2, color: 'var(--text-muted)' }}>
@@ -54,13 +55,13 @@ const BookSlotPage = () => {
                     <Stack spacing={2}>
                         {!isAuthenticated && (
                             <>
-                                <TextField
+                                <AppInput
                                     label="Guest Name"
                                     value={guestName}
                                     onChange={(e) => setGuestName(e.target.value)}
                                     required
                                 />
-                                <TextField
+                                <AppInput
                                     label="Guest Email"
                                     type="email"
                                     value={guestEmail}
@@ -69,16 +70,16 @@ const BookSlotPage = () => {
                                 />
                             </>
                         )}
-                        <Button type="submit" variant="contained" disabled={loading}>
+                        <AppButton type="submit" disabled={loading}>
                             {loading ? 'Submitting...' : 'Confirm Booking'}
-                        </Button>
-                        <Button variant="outlined" onClick={() => navigate('/slots')}>
+                        </AppButton>
+                        <AppButton variant="outlined" onClick={() => navigate('/slots')}>
                             Back to Slots
-                        </Button>
+                        </AppButton>
                     </Stack>
                 </Box>
             </CardContent>
-        </Card>
+        </AppCard>
     );
 };
 

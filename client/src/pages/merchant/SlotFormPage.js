@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, CardContent, Stack, Typography } from '@mui/material';
 import { createSlot, getMySlots, updateSlot } from '../../services/slotsService';
+import { AppButton, AppCard, AppInput } from '../../components/common';
 
 const emptyForm = {
     title: '',
@@ -85,7 +86,7 @@ const SlotFormPage = () => {
     };
 
     return (
-        <Card sx={{ maxWidth: 760, border: '1px solid var(--border)' }}>
+        <AppCard sx={{ maxWidth: 760 }}>
             <CardContent>
                 <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
                     {isEdit ? 'Edit Slot' : 'Create Slot'}
@@ -93,25 +94,25 @@ const SlotFormPage = () => {
                 {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
                 <Box component="form" onSubmit={handleSubmit}>
                     <Stack spacing={2}>
-                        <TextField label="Title" value={form.title} onChange={handleChange('title')} required />
-                        <TextField label="Description" value={form.description} onChange={handleChange('description')} multiline minRows={3} />
-                        <TextField label="Price" type="number" value={form.price} onChange={handleChange('price')} />
-                        <TextField label="Start Time" type="datetime-local" value={form.startTime} onChange={handleChange('startTime')} InputLabelProps={{ shrink: true }} />
-                        <TextField label="End Time" type="datetime-local" value={form.endTime} onChange={handleChange('endTime')} InputLabelProps={{ shrink: true }} />
-                        <TextField label="Capacity" type="number" value={form.capacity} onChange={handleChange('capacity')} />
-                        <TextField label="Location Label" value={form.locationLabel} onChange={handleChange('locationLabel')} />
+                        <AppInput label="Title" value={form.title} onChange={handleChange('title')} required />
+                        <AppInput label="Description" value={form.description} onChange={handleChange('description')} multiline minRows={3} />
+                        <AppInput label="Price" type="number" value={form.price} onChange={handleChange('price')} />
+                        <AppInput label="Start Time" type="datetime-local" value={form.startTime} onChange={handleChange('startTime')} InputLabelProps={{ shrink: true }} />
+                        <AppInput label="End Time" type="datetime-local" value={form.endTime} onChange={handleChange('endTime')} InputLabelProps={{ shrink: true }} />
+                        <AppInput label="Capacity" type="number" value={form.capacity} onChange={handleChange('capacity')} />
+                        <AppInput label="Location Label" value={form.locationLabel} onChange={handleChange('locationLabel')} />
                         <Stack direction="row" spacing={1}>
-                            <Button variant="contained" type="submit" disabled={loading}>
+                            <AppButton type="submit" disabled={loading}>
                                 {loading ? 'Saving...' : 'Save Slot'}
-                            </Button>
-                            <Button variant="outlined" onClick={() => navigate('/merchant/slots')}>
+                            </AppButton>
+                            <AppButton variant="outlined" onClick={() => navigate('/merchant/slots')}>
                                 Cancel
-                            </Button>
+                            </AppButton>
                         </Stack>
                     </Stack>
                 </Box>
             </CardContent>
-        </Card>
+        </AppCard>
     );
 };
 

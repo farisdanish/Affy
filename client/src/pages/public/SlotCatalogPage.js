@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Button, Card, CardContent, Chip, CircularProgress, Stack, Typography } from '@mui/material';
+import { Alert, CardContent, Chip, Stack, Typography } from '@mui/material';
 import useSlots from '../../hooks/useSlots';
 import { getPublicSlots } from '../../services/slotsService';
+import { AppButton, AppCard, EmptyState, LoadingSpinner } from '../../components/common';
 
 const SlotCatalogPage = () => {
     const { data: slots = [], loading, error } = useSlots(getPublicSlots, { auto: true, initialData: [] });
@@ -10,12 +11,14 @@ const SlotCatalogPage = () => {
     return (
         <Stack spacing={2}>
             <Typography variant="h4" sx={{ fontWeight: 700 }}>Available Slots</Typography>
-            {loading && <CircularProgress />}
+            {loading && <LoadingSpinner />}
             {error && <Alert severity="error">{error}</Alert>}
-            {!loading && slots.length === 0 && <Alert severity="info">No active slots available.</Alert>}
+            {!loading && slots.length === 0 && (
+                <EmptyState title="No active slots available" description="Check back soon for new offers." />
+            )}
 
             {slots.map((slot) => (
-                <Card key={slot._id} sx={{ border: '1px solid var(--border)' }}>
+                <AppCard key={slot._id}>
                     <CardContent>
                         <Typography variant="h6">{slot.title}</Typography>
                         <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: 1 }}>
@@ -25,11 +28,11 @@ const SlotCatalogPage = () => {
                             {slot.price !== undefined && <Chip label={`RM ${slot.price}`} size="small" />}
                             {slot.locationLabel && <Chip label={slot.locationLabel} size="small" variant="outlined" />}
                         </Stack>
-                        <Button component={Link} to={`/book/${slot._id}`} variant="contained">
+                        <AppButton component={Link} to={`/book/${slot._id}`}>
                             Book Now
-                        </Button>
+                        </AppButton>
                     </CardContent>
-                </Card>
+                </AppCard>
             ))}
         </Stack>
     );

@@ -30,7 +30,10 @@ const MerchantLayout = () => {
             >
                 <Toolbar sx={{ gap: 2 }}>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>{roleTitle}</Typography>
-                    <Button component={Link} to="/merchant/slots" color="inherit">My Slots</Button>
+                    <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button>
+                    <Button component={Link} to="/merchant/slots" color="inherit">
+                        {user?.role === 'admin' || user?.role === 'developer' ? 'All Slots' : 'My Slots'}
+                    </Button>
                     <Button component={Link} to="/merchant/slots/new" color="inherit">Create Slot</Button>
                     <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
                         <IconButton
