@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Slot = require('../models/Slot');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { logActivity } = require('../services/activityLogService');
 
 // GET /slots/public — public, active slots only
 router.get('/public', async (req, res) => {
@@ -64,6 +65,14 @@ router.post(
                 isActive: true,
             });
             await slot.save();
+            await logActivity({
+                actorId: req.user.id,
+                actorRole: req.user.role,
+                action: 'slot.created',
+                entityType: 'slot',
+                entityId: slot._id,
+                metadata: { title: slot.title },
+            });
             res.status(201).json(slot);
         } catch (err) {
             res.status(500).json({ message: err.message });
@@ -102,6 +111,14 @@ router.put(
             });
 
             await slot.save();
+            await logActivity({
+                actorId: req.user.id,
+                actorRole: req.user.role,
+                action: 'slot.updated',
+                entityType: 'slot',
+                entityId: slot._id,
+                metadata: { updatedFields: Object.keys(req.body || {}) },
+            });
             res.json(slot);
         } catch (err) {
             res.status(500).json({ message: err.message });
@@ -122,6 +139,14 @@ router.delete('/:id', authenticateToken, authorizeRoles('merchant', 'admin', 'de
 
         slot.isActive = false;
         await slot.save();
+        await logActivity({
+            actorId: req.user.id,
+            actorRole: req.user.role,
+            action: 'slot.deleted',
+            entityType: 'slot',
+            entityId: slot._id,
+            metadata: { softDelete: true },
+        });
         res.json({ message: 'Slot deactivated', slot });
     } catch (err) {
         res.status(500).json({ message: err.message });

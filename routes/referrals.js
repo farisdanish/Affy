@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { nanoid } = require('nanoid');
-const { body, param, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const Slot = require('../models/Slot');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { logActivity } = require('../services/activityLogService');
 
 // GET /referrals/my-code — agent only
 // Returns existing refCode or generates one on first call
@@ -67,6 +68,18 @@ router.post(
 
             const baseUrl = process.env.APP_PUBLIC_URL || 'http://localhost:3000';
             const shareUrl = `${baseUrl}/book/${slotId}?ref=${user.refCode}`;
+
+            await logActivity({
+                actorId: req.user.id,
+                actorRole: req.user.role,
+                action: 'ref.link_generated',
+                entityType: 'referral',
+                entityId: slot._id,
+                metadata: {
+                    slotId: slot._id,
+                    refCode: user.refCode,
+                },
+            });
 
             res.json({ shareUrl, refCode: user.refCode, slotId });
         } catch (err) {

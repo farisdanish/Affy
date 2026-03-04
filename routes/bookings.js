@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 const Slot = require('../models/Slot');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
-const { authenticateToken } = require('../middleware/auth');
+const { logActivity } = require('../services/activityLogService');
 
 // Rate limiting: 5 requests per 15 minutes per IP
 const bookingRateLimit = rateLimit({
@@ -58,13 +59,14 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         // Try to optionally authenticate the user (non-blocking if no token present)
         let bookingUserId = null;
         let bookingType = 'guest';
+        let actorRole = 'public';
         const authHeader = req.headers['authorization'];
         if (authHeader && authHeader.startsWith('Bearer ')) {
             try {
-                const jwt = require('jsonwebtoken');
                 const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
                 bookingUserId = decoded.id;
                 bookingType = 'authenticated';
+                actorRole = decoded.role || 'user';
             } catch (_) {
                 // Invalid token → treat as guest
             }
@@ -91,6 +93,19 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         });
 
         await booking.save();
+        await logActivity({
+            actorId: bookingUserId,
+            actorRole,
+            action: 'booking.created',
+            entityType: 'booking',
+            entityId: booking._id,
+            metadata: {
+                slotId,
+                refCode: resolvedRefCode,
+                agentId: resolvedAgentId,
+                bookingType,
+            },
+        });
         return res.status(201).json({ booking });
 
     } catch (err) {

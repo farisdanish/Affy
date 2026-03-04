@@ -82,6 +82,7 @@ app.use('/auth', require('../routes/auth'));
 app.use('/slots', require('../routes/slots'));
 app.use('/bookings', require('../routes/bookings'));
 app.use('/referrals', require('../routes/referrals'));
+app.use('/activity-logs', require('../routes/activityLogs'));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
