@@ -26,13 +26,13 @@ Sprint 1 is complete. Moving to Sprint 2.
 
 ### Sprint 2 (Core Affiliate Loop)
 
-- [ ] Merchant dashboard: CRUD booking slots
-- [ ] Agent dashboard: referral link generation (`?ref=agent123`)
-- [ ] Public booking flow capturing `ref` and saving it
-- [ ] Role-specific layouts and navigation (Navbar, Sidebar)
+- [x] Merchant dashboard: CRUD booking slots
+- [x] Agent dashboard: referral link generation (`?ref=agent123`)
+- [x] Public booking flow capturing `ref` and saving it
+- [x] Role-specific layouts and navigation (Navbar, Sidebar)
 - [ ] Reusable UI components (`components/common/`)
-- [ ] Custom hooks for data fetching (`hooks/`)
-- [ ] Activity logging model
+- [x] Custom hooks for data fetching (`hooks/`)
+- [x] Activity logging model + read API
 
 ## Sprint Plan
 
@@ -136,6 +136,7 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 HEALTHZ_TOKEN=your_healthz_token_optional
+APP_PUBLIC_URL=https://affy-three.vercel.app
 ```
 
 Create `.env` in `client/` (or set in Vercel dashboard):
@@ -176,8 +177,16 @@ Default admin: `admin@affy.com` / `admin123`
 | `GET` | `/healthz` | Public* | Health check with MongoDB status (`HEALTHZ_TOKEN` protected when configured) |
 | `POST` | `/auth/register` | Public | Register a new user |
 | `POST` | `/auth/login` | Public | Login, returns JWT + user |
-| `GET` | `/slots` | Public | List all slots |
-| `POST` | `/slots` | Merchant/Admin | Create a new slot |
+| `GET` | `/slots/public` | Public | List active public slots |
+| `GET` | `/slots/mine` | Merchant/Admin/Developer | List slots in actor scope |
+| `GET` | `/slots` | Merchant/Admin/Developer | List all slots (restricted) |
+| `POST` | `/slots` | Merchant/Admin/Developer | Create slot |
+| `PUT` | `/slots/:id` | Merchant owner/Admin/Developer | Update slot |
+| `DELETE` | `/slots/:id` | Merchant owner/Admin/Developer | Soft delete slot (`isActive=false`) |
+| `POST` | `/bookings` | Public/Auth | Create booking (guest/auth, referral attribution) |
+| `GET` | `/referrals/my-code` | Agent | Get agent referral code (auto-generate if missing) |
+| `POST` | `/referrals/link` | Agent | Generate share URL for a slot |
+| `GET` | `/activity-logs` | Admin/Developer | Paginated activity logs |
 
 ## Build Approach
 
