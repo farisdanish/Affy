@@ -24,15 +24,17 @@ A **slot** is a single bookable offer created by a merchant (for example, a cons
 
 Sprint 1 is complete. Moving to Sprint 2.
 
-### Sprint 2 (Core Affiliate Loop)
+### Sprint 2 (Core Affiliate Loop) ✅
 
 - [x] Merchant dashboard: CRUD booking slots
 - [x] Agent dashboard: referral link generation (`?ref=agent123`)
 - [x] Public booking flow capturing `ref` and saving it
 - [x] Role-specific layouts and navigation (Navbar, Sidebar)
-- [ ] Reusable UI components (`components/common/`)
+- [x] Reusable UI components (`components/common/`)
 - [x] Custom hooks for data fetching (`hooks/`)
 - [x] Activity logging model + read API
+
+Sprint 2 is functionally complete. Moving to Sprint 3.
 
 ## Sprint Plan
 
@@ -54,14 +56,17 @@ Sprint 1 is complete. Moving to Sprint 2.
 - Public booking flow capturing `ref` and saving it
 - End of Sprint 2 target: first demoable product
 
-### Sprint 3 - First Complete User Journey
-- Public user browses listings and books end-to-end
-- Mock payment confirm flow (no Stripe yet)
+### Sprint 3 - Booking Lifecycle + Commission Baseline
+- Merchant booking operations (view queue, confirm/reject bookings)
+- Public booking UX completion (success state + booking reference + duplicate-booking guidance)
+- Agent attribution analytics (per-link/per-slot conversion summary)
+- Commission baseline rules (record commission-ready events on confirmed bookings)
+- CI quality hardening (required status checks + regression smoke coverage)
 
 ### Sprint 4 - Affiliate Layer
-- Commission tracking and calculation
-- Basic agent dashboard
-- Payment integration (ToyyibPay/FPX/Stripe)
+- Payment integration planning/prototype (ToyyibPay/FPX/Stripe)
+- Commission payout workflow draft
+- Admin reporting/dashboard iteration
 
 ### Deferred
 - Admin dashboard/internal tooling
