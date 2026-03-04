@@ -14,8 +14,16 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }) => {
     };
 
     return (
-        <AppCard sx={{ p: 2.5 }}>
-            <Stack direction="row" spacing={2} alignItems="center">
+        <AppCard
+            sx={{
+                p: 2.5,
+                minHeight: 132,
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
                 <Box
                     sx={{
                         width: 48,
@@ -31,11 +39,17 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }) => {
                     {Icon && <Icon size={24} />}
                 </Box>
                 <Box>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)', fontWeight: 500 }}>
+                    <Typography
+                        variant="body2"
+                        sx={{ color: 'var(--text-muted)', fontWeight: 500, whiteSpace: 'nowrap' }}
+                    >
                         {label}
                     </Typography>
-                    <Stack direction="row" spacing={1} alignItems="baseline">
-                        <Typography variant="h5" sx={{ fontWeight: 700, color: 'var(--text)' }}>
+                    <Stack direction="row" spacing={1} alignItems="baseline" sx={{ flexWrap: 'nowrap' }}>
+                        <Typography
+                            variant="h5"
+                            sx={{ fontWeight: 700, color: 'var(--text)', lineHeight: 1.1, whiteSpace: 'nowrap' }}
+                        >
                             {value}
                         </Typography>
                         {trend && (

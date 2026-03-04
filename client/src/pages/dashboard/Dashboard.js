@@ -168,6 +168,10 @@ const Dashboard = () => {
                                 <AppCard 
                                     sx={{ 
                                         p: { xs: 2.5, md: 3 }, 
+                                        minHeight: { xs: 188, md: 206 },
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
                                         cursor: 'pointer',
                                         transition: 'transform 0.2s ease, border-color 0.2s ease',
                                         '&:hover': {
@@ -195,10 +199,23 @@ const Dashboard = () => {
                                         </Box>
                                         <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
                                     </Stack>
-                                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5, color: 'var(--text)' }}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{ fontWeight: 600, mb: 0.5, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                    >
                                         {action.title}
                                     </Typography>
-                                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            color: 'var(--text-muted)',
+                                            minHeight: { xs: 44, md: 48 },
+                                            display: '-webkit-box',
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: 'vertical',
+                                            overflow: 'hidden',
+                                        }}
+                                    >
                                         {action.description}
                                     </Typography>
                                 </AppCard>
