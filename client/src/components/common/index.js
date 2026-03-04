@@ -4,3 +4,7 @@ export { default as AppCard } from './AppCard';
 export { default as EmptyState } from './EmptyState';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as ConfirmDialog } from './ConfirmDialog';
+export { default as AppBadge } from './AppBadge';
+export { default as StatsCard } from './StatsCard';
+export { default as AppAvatar } from './AppAvatar';
+export { default as AppTable } from './AppTable';

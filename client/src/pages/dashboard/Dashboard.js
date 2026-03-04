@@ -4,16 +4,32 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
     Box,
-    Button,
-    Card,
-    CardContent,
-    Chip,
+    Grid,
     IconButton,
     Stack,
     Tooltip,
     Typography,
+    Container
 } from '@mui/material';
-import { LayoutDashboard, Moon, Sun } from 'lucide-react';
+import { 
+    LayoutDashboard, 
+    Moon, 
+    Sun, 
+    LogOut, 
+    Calendar, 
+    Users, 
+    Link as LinkIcon, 
+    TrendingUp,
+    Settings,
+    ChevronRight
+} from 'lucide-react';
+import { 
+    AppButton, 
+    AppCard, 
+    StatsCard, 
+    AppAvatar, 
+    AppBadge 
+} from '../../components/common';
 
 const Dashboard = () => {
     const { user, logout } = useAuth();
@@ -28,111 +44,161 @@ const Dashboard = () => {
         navigate('/login');
     };
 
+    const getRoleActions = () => {
+        const actions = [];
+        if (role === 'merchant' || role === 'admin' || role === 'developer') {
+            actions.push({
+                title: 'Manage Slots',
+                description: 'Create and update your booking slots.',
+                icon: Calendar,
+                path: '/workspace/slots',
+                color: 'primary'
+            });
+        }
+        if (role === 'agent') {
+            actions.push({
+                title: 'Referral Dashboard',
+                description: 'Generate links and track your performance.',
+                icon: LinkIcon,
+                path: '/agent/referrals',
+                color: 'success'
+            });
+        }
+        actions.push({
+            title: 'Browse Slots',
+            description: 'View available slots in the catalog.',
+            icon: Users,
+            path: '/slots',
+            color: 'info'
+        });
+        return actions;
+    };
+
     return (
-        <Box
-            sx={{
-                minHeight: '100vh',
-                background: 'var(--bg)',
-                padding: { xs: 3, md: 6 },
-                transition: 'background 0.3s ease',
-            }}
-        >
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    mb: 4,
+        <Box sx={{ minHeight: '100vh', background: 'var(--bg)', pb: 8 }}>
+            {/* Header */}
+            <Box 
+                sx={{ 
+                    borderBottom: '1px solid var(--border)', 
+                    background: 'var(--bg-card)',
+                    py: 2,
+                    mb: 4
                 }}
             >
-                <Typography variant="h5" sx={{ fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>
-                    Affy
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                    <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
-                        <IconButton
-                            id="theme-toggle"
-                            onClick={toggleTheme}
-                            sx={{
-                                color: 'var(--text-muted)',
-                                '&:hover': { color: 'var(--primary)', background: 'var(--primary-light)' },
-                            }}
-                        >
-                            {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-                        </IconButton>
-                    </Tooltip>
-                    <Button
-                        onClick={handleLogout}
-                        variant="outlined"
-                        sx={{
-                            borderRadius: 'var(--radius)',
-                            borderColor: 'var(--border)',
-                            color: 'var(--text-muted)',
-                            textTransform: 'none',
-                            '&:hover': { borderColor: 'var(--primary)', color: 'var(--primary)', background: 'var(--primary-light)' },
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </Stack>
+                <Container maxWidth="lg">
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Stack direction="row" spacing={1.5} alignItems="center">
+                            <Box sx={{ color: 'var(--primary)', display: 'flex' }}>
+                                <LayoutDashboard size={28} />
+                            </Box>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px' }}>
+                                Affy
+                            </Typography>
+                        </Stack>
+
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+                                <IconButton onClick={toggleTheme} sx={{ color: 'var(--text-muted)' }}>
+                                    {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                                </IconButton>
+                            </Tooltip>
+                            <AppButton 
+                                variant="outlined" 
+                                size="small" 
+                                onClick={handleLogout}
+                                startIcon={LogOut}
+                                sx={{ borderRadius: '10px' }}
+                            >
+                                Logout
+                            </AppButton>
+                        </Stack>
+                    </Stack>
+                </Container>
             </Box>
 
-            <Card
-                sx={{
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius)',
-                    boxShadow: 'var(--shadow)',
-                }}
-            >
-                <CardContent sx={{ p: 4 }}>
-                    <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-                        <Box
-                            sx={{
-                                width: 48,
-                                height: 48,
-                                borderRadius: '50%',
-                                background: 'var(--primary-light)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <LayoutDashboard size={24} style={{ color: 'var(--primary)' }} />
-                        </Box>
+            <Container maxWidth="lg">
+                {/* Welcome Section */}
+                <Box sx={{ mb: 4 }}>
+                    <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+                        <AppAvatar name={user?.name} size={56} />
                         <Box>
-                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'var(--text)' }}>
-                                Welcome back, {user?.name || 'User'}
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)' }}>
+                                Hello, {user?.name?.split(' ')[0] || 'User'}!
                             </Typography>
-                            <Chip
-                                label={roleLabel}
-                                size="small"
-                                sx={{ mt: 0.5, background: 'var(--primary-light)', color: 'var(--primary)', fontWeight: 500 }}
-                            />
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <AppBadge label={roleLabel} color="primary" size="sm" />
+                                <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                    Welcome to your workspace dashboard.
+                                </Typography>
+                            </Stack>
                         </Box>
                     </Stack>
+                </Box>
 
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: 3 }}>
-                        Pick a workspace to continue.
-                    </Typography>
+                {/* Stats Grid */}
+                <Grid container spacing={3} sx={{ mb: 5 }}>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
+                    </Grid>
+                </Grid>
 
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-                        {(role === 'merchant' || role === 'admin' || role === 'developer') && (
-                            <Button variant="contained" onClick={() => navigate('/workspace/slots')}>
-                                Manage Slots
-                            </Button>
-                        )}
-                        {role === 'agent' && (
-                            <Button variant="contained" onClick={() => navigate('/agent/referrals')}>
-                                Open Referrals
-                            </Button>
-                        )}
-                        <Button variant="outlined" onClick={() => navigate('/slots')}>
-                            Browse Public Slots
-                        </Button>
-                    </Stack>
-                </CardContent>
-            </Card>
+                {/* Quick Actions */}
+                <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'var(--text)' }}>
+                    Quick Actions
+                </Typography>
+                <Grid container spacing={3}>
+                    {getRoleActions().map((action, idx) => (
+                        <Grid item xs={12} md={4} key={idx}>
+                            <AppCard 
+                                sx={{ 
+                                    p: 3, 
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s ease, border-color 0.2s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-4px)',
+                                        borderColor: 'var(--primary)',
+                                    }
+                                }}
+                                onClick={() => navigate(action.path)}
+                            >
+                                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                                    <Box
+                                        sx={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: '10px',
+                                            background: `var(--${action.color === 'primary' ? 'primary' : action.color}-light)`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: action.color === 'primary' ? 'var(--primary)' : action.color,
+                                            mb: 2
+                                        }}
+                                    >
+                                        <action.icon size={22} />
+                                    </Box>
+                                    <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                                </Stack>
+                                <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                                    {action.title}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                    {action.description}
+                                </Typography>
+                            </AppCard>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
         </Box>
     );
 };
