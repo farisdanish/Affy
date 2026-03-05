@@ -150,7 +150,29 @@ Create `.env` in `client/` (or set in Vercel dashboard):
 REACT_APP_API_URL=http://localhost:5000
 ```
 
-### 3. Run backend
+### 3. Run with Docker (Recommended for testing on a different device)
+
+You can quickly spin up the entire application stack (Frontend, Backend, and a local MongoDB instance) using Docker Compose.
+
+Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed. 
+From the project root, run:
+
+```bash
+docker compose up --build
+```
+
+- The React frontend will be available at `http://localhost:3000`
+- The Express backend API will be available at `http://localhost:5000`
+- The local MongoDB instance will be available on port `27017`
+- Hot-reloading is enabled for both frontend and backend through volume mounts.
+
+To stop the containers, press `Ctrl+C` or run:
+
+```bash
+docker compose down
+```
+
+### 4. Run backend manually
 
 From project root:
 
@@ -158,7 +180,7 @@ From project root:
 node server/server.js
 ```
 
-### 4. Run frontend
+### 5. Run frontend
 
 From `client/`:
 
@@ -166,7 +188,7 @@ From `client/`:
 npm start
 ```
 
-### 5. Seed admin user
+### 6. Seed admin user
 
 ```bash
 npm run seed:admin
