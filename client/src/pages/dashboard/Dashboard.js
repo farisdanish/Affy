@@ -137,26 +137,28 @@ const Dashboard = () => {
                         </Stack>
                     </Box>
 
-                    {/* Stats Grid */}
-                    <Grid
-                        container
-                        columnSpacing={{ xs: 0, sm: 2, md: 3 }}
-                        rowSpacing={{ xs: 2, md: 3 }}
-                        sx={{ mb: 5 }}
-                    >
-                        <Grid item xs={12} sm={6} md={3}>
-                            <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
+                    {/* Stats Grid - Visible only to privileged roles */}
+                    {['admin', 'merchant', 'developer'].includes(role) && (
+                        <Grid
+                            container
+                            columnSpacing={{ xs: 0, sm: 2, md: 3 }}
+                            rowSpacing={{ xs: 2, md: 3 }}
+                            sx={{ mb: 5 }}
+                        >
+                            <Grid item xs={12} sm={6} md={3}>
+                                <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
-                            <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
-                        </Grid>
-                    </Grid>
+                    )}
 
                     {/* Quick Actions */}
                     <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, px: { xs: 2, sm: 0 } }}>
