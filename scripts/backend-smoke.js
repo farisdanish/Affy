@@ -1,5 +1,6 @@
 const routeModules = [
     './routes/auth',
+    './routes/profile',
     './routes/slots',
     './routes/bookings',
     './routes/referrals',

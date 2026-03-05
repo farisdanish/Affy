@@ -79,10 +79,14 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
         let bookingUserId = null;
         let bookingType = 'guest';
         let actorRole = 'public';
+        // H5: prefer httpOnly cookie, fall back to Authorization header
+        const cookieToken = req.cookies && req.cookies.accessToken;
         const authHeader = req.headers['authorization'];
-        if (authHeader && authHeader.startsWith('Bearer ')) {
+        const headerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+        const optionalToken = cookieToken || headerToken;
+        if (optionalToken) {
             try {
-                const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
+                const decoded = jwt.verify(optionalToken, process.env.JWT_SECRET);
                 bookingUserId = decoded.id;
                 bookingType = 'authenticated';
                 actorRole = decoded.role || 'user';

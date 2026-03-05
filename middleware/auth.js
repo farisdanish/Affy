@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 /**
- * Verify JWT from Authorization header and attach decoded user to req.user.
+ * Verify JWT from httpOnly cookie (primary) or Authorization header (fallback).
+ * Attaches decoded payload to req.user.
  */
 const authenticateToken = (req, res, next) => {
+    // H5: prefer httpOnly cookie, fall back to Authorization header for API consumers
+    const cookieToken = req.cookies && req.cookies.accessToken;
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
+    const headerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+    const token = cookieToken || headerToken;
 
     if (!token) {
         return res.status(401).json({

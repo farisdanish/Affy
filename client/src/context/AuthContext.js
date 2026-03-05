@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { login as loginApi } from '../services/authService';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { login as loginApi, fetchCurrentUser, logout as logoutApi } from '../services/authService';
 
 const AuthContext = createContext(null);
 
@@ -11,45 +11,56 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Rehydrate auth state from localStorage on mount
+    // H5: Rehydrate auth state from httpOnly cookie session on mount
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
-        if (storedToken && storedUser) {
-            setToken(storedToken);
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
+        let cancelled = false;
+        const checkSession = async () => {
+            try {
+                const data = await fetchCurrentUser();
+                if (!cancelled) setUser(data.user);
+            } catch (_) {
+                // No valid session — stay logged out
+                if (!cancelled) setUser(null);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+        checkSession();
+        return () => { cancelled = true; };
+    }, []);
+
+    // H3: Listen for forced logout from the refresh interceptor
+    useEffect(() => {
+        const handleForceLogout = () => {
+            setUser(null);
+        };
+        window.addEventListener('auth:logout', handleForceLogout);
+        return () => window.removeEventListener('auth:logout', handleForceLogout);
     }, []);
 
     const login = async (identifier, password) => {
         const data = await loginApi(identifier, password);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setToken(data.token);
         setUser(data.user);
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setToken(null);
+    const logout = useCallback(async () => {
+        try {
+            await logoutApi();
+        } catch (_) {
+            // Best-effort server logout
+        }
         setUser(null);
-    };
+    }, []);
 
-    const refreshUser = (userData) => {
-        const updatedUser = { ...user, ...userData };
-        setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-    };
+    const refreshUser = useCallback((userData) => {
+        setUser(prev => ({ ...prev, ...userData }));
+    }, []);
 
     const value = {
         user,
-        token,
-        isAuthenticated: !!token,
+        isAuthenticated: !!user,
         loading,
         login,
         logout,

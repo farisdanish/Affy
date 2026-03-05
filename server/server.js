@@ -1,20 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const HEALTHZ_TOKEN = process.env.HEALTHZ_TOKEN;
 
+// H1: HTTP security headers
+app.use(helmet());
+
 app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://affy-three.vercel.app'
-  ]
+  ],
+  credentials: true, // H5: allow httpOnly cookies
 }));
 
-app.use(express.json());
+// H5: parse cookies for token auth
+app.use(cookieParser());
+
+// M3: cap request body size to prevent large-payload DoS
+app.use(express.json({ limit: '1mb' }));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -77,13 +87,23 @@ app.get('/healthz', async (req, res) => {
   }
 });
 
-// Routes
-app.use('/auth', require('../routes/auth'));
-app.use('/profile', require('../routes/profile'));
-app.use('/slots', require('../routes/slots'));
-app.use('/bookings', require('../routes/bookings'));
-app.use('/referrals', require('../routes/referrals'));
-app.use('/activity-logs', require('../routes/activityLogs'));
+// L3: API versioning — all business routes under /api/v1
+app.use('/api/v1/auth', require('../routes/auth'));
+app.use('/api/v1/profile', require('../routes/profile'));
+app.use('/api/v1/slots', require('../routes/slots'));
+app.use('/api/v1/bookings', require('../routes/bookings'));
+app.use('/api/v1/referrals', require('../routes/referrals'));
+app.use('/api/v1/activity-logs', require('../routes/activityLogs'));
+
+// L1: Global error handler — strip internal details in production
+app.use((err, req, res, _next) => {
+  console.error('Unhandled error:', err);
+  const isProd = process.env.NODE_ENV === 'production';
+  res.status(err.status || 500).json({
+    message: isProd ? 'Internal server error' : (err.message || 'Internal server error'),
+    code: 'INTERNAL_ERROR',
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
