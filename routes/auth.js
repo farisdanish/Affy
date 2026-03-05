@@ -12,26 +12,36 @@ const { SELF_REGISTRABLE_ROLES, sanitizeSelfRegistrationRole } = require('../uti
 
 // ── Cookie helpers ────────────────────────────────────────────────
 const isProduction = () => process.env.NODE_ENV === 'production';
+const cookieSameSite = () => (isProduction() ? 'none' : 'lax');
 
 const setTokenCookies = (res, accessToken, refreshToken) => {
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
     secure: isProduction(),
-    sameSite: isProduction() ? 'strict' : 'lax',
+    sameSite: cookieSameSite(),
     maxAge: 15 * 60 * 1000,       // 15 min
   });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: isProduction(),
-    sameSite: isProduction() ? 'strict' : 'lax',
+    sameSite: cookieSameSite(),
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     path: '/api/v1/auth',            // only sent to auth endpoints
   });
 };
 
 const clearTokenCookies = (res) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken', { path: '/api/v1/auth' });
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    secure: isProduction(),
+    sameSite: cookieSameSite(),
+  });
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: isProduction(),
+    sameSite: cookieSameSite(),
+    path: '/api/v1/auth',
+  });
 };
 
 const signTokens = (user) => {
