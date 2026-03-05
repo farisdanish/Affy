@@ -1,44 +1,44 @@
 import React from 'react';
 import { Button } from '@mui/material';
 
-const AppButton = ({ 
-    children, 
-    variant = 'contained', 
-    sx = {}, 
-    startIcon: StartIcon, 
+const AppButton = ({
+    children,
+    variant = 'contained',
+    sx = {},
+    startIcon: StartIcon,
     endIcon: EndIcon,
     iconSize = 18,
-    ...props 
+    ...props
 }) => (
     <Button
         variant={variant}
         startIcon={StartIcon && <StartIcon size={iconSize} />}
         endIcon={EndIcon && <EndIcon size={iconSize} />}
         sx={{
-            borderRadius: 'var(--radius)',
+            borderRadius: '12px',
             textTransform: 'none',
             fontWeight: 600,
             padding: '8px 16px',
             transition: 'all 0.2s ease',
             ...(variant === 'contained'
                 ? {
-                    background: 'var(--primary)',
+                    background: 'primary.main',
                     color: '#fff',
-                    boxShadow: '0 4px 12px var(--primary-shadow)',
-                    '&:hover': { 
-                        background: 'var(--primary-hover)',
+                    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+                    '&:hover': {
+                        background: 'primary.dark',
                         transform: 'translateY(-1px)',
-                        boxShadow: '0 6px 16px var(--primary-shadow)',
+                        boxShadow: '0 6px 16px rgba(99, 102, 241, 0.4)',
                     },
                     '&:active': { transform: 'translateY(0)' },
                 }
                 : {
-                    borderColor: 'var(--border)',
-                    color: 'var(--text)',
+                    borderColor: 'divider',
+                    color: 'text.primary',
                     '&:hover': {
-                        borderColor: 'var(--primary)',
-                        background: 'var(--primary-light)',
-                        color: 'var(--primary)',
+                        borderColor: 'primary.main',
+                        background: 'primary.light',
+                        color: 'primary.main',
                     },
                 }),
             ...sx,

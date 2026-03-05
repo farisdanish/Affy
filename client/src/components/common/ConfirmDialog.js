@@ -17,16 +17,16 @@ const ConfirmDialog = ({
         onClose={onClose}
         PaperProps={{
             sx: {
-                borderRadius: 'var(--radius)',
-                border: '1px solid var(--border)',
-                background: 'var(--bg-card)',
-                color: 'var(--text)',
+                borderRadius: '12px',
+                border: '1px solid divider',
+                background: 'background.paper',
+                color: 'text.primary',
             },
         }}
     >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-            <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {description}
             </Typography>
         </DialogContent>

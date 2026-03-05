@@ -6,29 +6,29 @@ const AppInput = ({ sx = {}, ...props }) => (
         fullWidth
         InputLabelProps={{
             sx: {
-                color: 'var(--text-muted)',
-                '&.Mui-focused': { color: 'var(--primary)' },
+                color: 'text.secondary',
+                '&.Mui-focused': { color: 'primary.main' },
             },
             ...(props.InputLabelProps || {}),
         }}
         sx={{
             '& .MuiInputBase-input': {
-                color: 'var(--text)',
+                color: 'text.primary',
                 '&::placeholder': {
-                    color: 'var(--text-muted)',
+                    color: 'text.secondary',
                     opacity: 1,
                 },
             },
             '& .MuiSvgIcon-root': {
-                color: 'var(--text-muted)',
+                color: 'text.secondary',
             },
             '& .MuiOutlinedInput-root': {
-                borderRadius: 'var(--radius)',
-                color: 'var(--text)',
-                background: 'var(--bg-card)',
-                '& fieldset': { borderColor: 'var(--border)' },
-                '&:hover fieldset': { borderColor: 'var(--primary)' },
-                '&.Mui-focused fieldset': { borderColor: 'var(--primary)' },
+                borderRadius: '12px',
+                color: 'text.primary',
+                background: 'background.paper',
+                '& fieldset': { borderColor: 'divider' },
+                '&:hover fieldset': { borderColor: 'primary.main' },
+                '&.Mui-focused fieldset': { borderColor: 'primary.main' },
             },
             ...sx,
         }}

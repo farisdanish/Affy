@@ -5,7 +5,7 @@ import AppCard from './AppCard';
 const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }) => {
     const getColor = () => {
         const colors = {
-            primary: 'var(--primary)',
+            primary: 'primary.main',
             success: '#16a34a',
             error: '#dc2626',
             info: '#2563eb',
@@ -41,14 +41,14 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }) => {
                 <Box>
                     <Typography
                         variant="body2"
-                        sx={{ color: 'var(--text-muted)', fontWeight: 500, whiteSpace: 'nowrap' }}
+                        sx={{ color: 'text.secondary', fontWeight: 500, whiteSpace: 'nowrap' }}
                     >
                         {label}
                     </Typography>
                     <Stack direction="row" spacing={1} alignItems="baseline" sx={{ flexWrap: 'nowrap' }}>
                         <Typography
                             variant="h5"
-                            sx={{ fontWeight: 700, color: 'var(--text)', lineHeight: 1.1, whiteSpace: 'nowrap' }}
+                            sx={{ fontWeight: 700, color: 'text.primary', lineHeight: 1.1, whiteSpace: 'nowrap' }}
                         >
                             {value}
                         </Typography>

@@ -12,11 +12,11 @@ const EmptyState = ({
 }) => (
     <Box
         sx={{
-            border: '1px dashed var(--border)',
-            borderRadius: 'var(--radius)',
+            border: '1px dashed divider',
+            borderRadius: '12px',
             p: { xs: 4, md: 6 },
             textAlign: 'center',
-            background: 'var(--primary-light)',
+            background: 'primary.light',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -25,14 +25,14 @@ const EmptyState = ({
         }}
     >
         {Icon && (
-            <Box sx={{ color: 'var(--text-muted)', mb: 2, opacity: 0.5 }}>
+            <Box sx={{ color: 'text.secondary', mb: 2, opacity: 0.5 }}>
                 <Icon size={48} />
             </Box>
         )}
-        <Typography variant="h6" sx={{ color: 'var(--text)', mb: 1, fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ color: 'text.primary', mb: 1, fontWeight: 600 }}>
             {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: actionLabel ? 3 : 0, maxWidth: 300, mx: 'auto' }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mb: actionLabel ? 3 : 0, maxWidth: 300, mx: 'auto' }}>
             {description}
         </Typography>
         {actionLabel && (

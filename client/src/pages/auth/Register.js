@@ -18,15 +18,15 @@ import { REGISTRABLE_ROLES } from '../../config/roles';
 const inputSx = {
     mb: 2,
     '& .MuiOutlinedInput-root': {
-        borderRadius: 'var(--radius)',
-        color: 'var(--text)',
-        '& fieldset': { borderColor: 'var(--border)' },
-        '&:hover fieldset': { borderColor: 'var(--primary)' },
-        '&.Mui-focused fieldset': { borderColor: 'var(--primary)' },
+        borderRadius: '12px',
+        color: 'text.primary',
+        '& fieldset': { borderColor: 'divider' },
+        '&:hover fieldset': { borderColor: 'primary.main' },
+        '&.Mui-focused fieldset': { borderColor: 'primary.main' },
     },
-    '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-    '& .MuiInputLabel-root.Mui-focused': { color: 'var(--primary)' },
-    '& .MuiSvgIcon-root': { color: 'var(--text-muted)' },
+    '& .MuiInputLabel-root': { color: 'text.secondary' },
+    '& .MuiInputLabel-root.Mui-focused': { color: 'primary.main' },
+    '& .MuiSvgIcon-root': { color: 'text.secondary' },
 };
 
 const Register = () => {
@@ -60,7 +60,7 @@ const Register = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'var(--bg)',
+                background: 'background.default',
                 padding: 3,
                 transition: 'background 0.3s ease',
             }}
@@ -69,10 +69,10 @@ const Register = () => {
                 sx={{
                     maxWidth: 420,
                     width: '100%',
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius)',
-                    boxShadow: 'var(--shadow)',
+                    background: 'background.paper',
+                    border: '1px solid divider',
+                    borderRadius: '12px',
+                    boxShadow: 'none',
                     transition: 'background 0.3s ease, box-shadow 0.3s ease',
                 }}
             >
@@ -83,7 +83,7 @@ const Register = () => {
                                 width: 56,
                                 height: 56,
                                 borderRadius: '50%',
-                                background: 'var(--primary-light)',
+                                background: 'primary.light',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -91,24 +91,24 @@ const Register = () => {
                                 mb: 2,
                             }}
                         >
-                            <UserPlus size={28} style={{ color: 'var(--primary)' }} />
+                            <UserPlus size={28} style={{ color: 'primary.main' }} />
                         </Box>
                         <Typography
                             variant="h5"
-                            sx={{ fontWeight: 700, color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}
+                            sx={{ fontWeight: 700, color: 'text.primary', fontFamily: 'Inter, sans-serif' }}
                         >
                             Create an Account
                         </Typography>
                         <Typography
                             variant="body2"
-                            sx={{ color: 'var(--text-muted)', mt: 0.5 }}
+                            sx={{ color: 'text.secondary', mt: 0.5 }}
                         >
                             Join Affy to get started
                         </Typography>
                     </Box>
 
                     {error && (
-                        <Alert severity="error" sx={{ mb: 2, borderRadius: 'var(--radius)' }}>
+                        <Alert severity="error" sx={{ mb: 2, borderRadius: '12px' }}>
                             {error}
                         </Alert>
                     )}
@@ -166,13 +166,13 @@ const Register = () => {
                             disabled={loading}
                             sx={{
                                 py: 1.5,
-                                borderRadius: 'var(--radius)',
-                                background: 'var(--primary)',
+                                borderRadius: '12px',
+                                background: 'primary.main',
                                 fontWeight: 600,
                                 fontFamily: 'Inter, sans-serif',
                                 textTransform: 'none',
                                 fontSize: '1rem',
-                                '&:hover': { background: 'var(--primary-hover)' },
+                                '&:hover': { background: 'primary.dark' },
                             }}
                         >
                             {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
@@ -181,10 +181,10 @@ const Register = () => {
 
                     <Typography
                         variant="body2"
-                        sx={{ textAlign: 'center', mt: 3, color: 'var(--text-muted)' }}
+                        sx={{ textAlign: 'center', mt: 3, color: 'text.secondary' }}
                     >
                         Already have an account?{' '}
-                        <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 500 }}>
+                        <Link to="/login" style={{ color: 'primary.main', fontWeight: 500 }}>
                             Sign in
                         </Link>
                     </Typography>

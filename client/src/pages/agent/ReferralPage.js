@@ -51,10 +51,10 @@ const ReferralPage = () => {
     return (
         <Box>
             <Box sx={{ mb: 4 }}>
-                <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)' }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary' }}>
                     Referral Dashboard
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Generate and manage your referral links to earn commissions.
                 </Typography>
             </Box>
@@ -64,13 +64,13 @@ const ReferralPage = () => {
                     <AppCard 
                         sx={{ 
                             height: '100%',
-                            background: 'linear-gradient(135deg, var(--bg-card) 0%, var(--primary-light) 100%)',
-                            border: '1px solid var(--primary-light)'
+                            background: 'linear-gradient(135deg, background.paper 0%, primary.light 100%)',
+                            border: '1px solid primary.light'
                         }}
                     >
                         <Stack spacing={2} sx={{ p: 1 }}>
                             <Stack direction="row" spacing={1.5} alignItems="center">
-                                <Box sx={{ p: 1, borderRadius: '10px', background: 'var(--primary)', color: '#fff' }}>
+                                <Box sx={{ p: 1, borderRadius: '10px', background: 'primary.main', color: '#fff' }}>
                                     <Code size={20} />
                                 </Box>
                                 <Typography variant="h6" sx={{ fontWeight: 600 }}>Your Unique Code</Typography>
@@ -80,14 +80,14 @@ const ReferralPage = () => {
                                     <LoadingSpinner />
                                 ) : (
                                     <Stack direction="row" spacing={1} alignItems="center">
-                                        <Typography variant="h3" sx={{ fontWeight: 800, color: 'var(--primary)', letterSpacing: '1px' }}>
+                                        <Typography variant="h3" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: '1px' }}>
                                             {refCode}
                                         </Typography>
                                         <Tooltip title="Copy referral code">
                                             <IconButton 
                                                 size="small" 
                                                 onClick={() => handleCopy(refCode, 'refcode')}
-                                                sx={{ color: 'var(--primary)' }}
+                                                sx={{ color: 'primary.main' }}
                                             >
                                                 {copiedId === 'refcode' ? <CheckCircle size={18} /> : <Copy size={18} />}
                                             </IconButton>
@@ -95,7 +95,7 @@ const ReferralPage = () => {
                                     </Stack>
                                 )}
                             </Box>
-                            <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                 This code is automatically appended to your generated links.
                             </Typography>
                         </Stack>
@@ -107,20 +107,20 @@ const ReferralPage = () => {
                         <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>Performance Summary</Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={6} sm={3}>
-                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: 'block' }}>Total Clicks</Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Total Clicks</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>1,240</Typography>
                             </Grid>
                             <Grid item xs={6} sm={3}>
-                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: 'block' }}>Conversions</Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Conversions</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>42</Typography>
                             </Grid>
                             <Grid item xs={6} sm={3}>
-                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: 'block' }}>Conv. Rate</Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Conv. Rate</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700, color: '#16a34a' }}>3.4%</Typography>
                             </Grid>
                             <Grid item xs={6} sm={3}>
-                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: 'block' }}>Earned</Typography>
-                                <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--primary)' }}>$420.00</Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Earned</Typography>
+                                <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>$420.00</Typography>
                             </Grid>
                         </Grid>
                     </AppCard>
@@ -130,7 +130,7 @@ const ReferralPage = () => {
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Available Slots for Promotion</Typography>
             
             {actionError && (
-                <Alert severity="error" icon={<AlertCircle size={20} />} sx={{ mb: 2, borderRadius: 'var(--radius)' }}>
+                <Alert severity="error" icon={<AlertCircle size={20} />} sx={{ mb: 2, borderRadius: '12px' }}>
                     {actionError}
                 </Alert>
             )}
@@ -154,14 +154,14 @@ const ReferralPage = () => {
                             key={slot._id} 
                             sx={{ 
                                 p: 3,
-                                '&:hover': { borderColor: 'var(--primary-light)' }
+                                '&:hover': { borderColor: 'primary.light' }
                             }}
                         >
                             <Grid container spacing={3} alignItems="center">
                                 <Grid item xs={12} md={5}>
                                     <Stack spacing={0.5}>
                                         <Typography variant="h6" sx={{ fontWeight: 600 }}>{slot.title}</Typography>
-                                        <Typography variant="body2" sx={{ color: 'var(--text-muted)', lineClamp: 1 }}>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary', lineClamp: 1 }}>
                                             {slot.description || 'Join this exciting slot and book your spot today.'}
                                         </Typography>
                                     </Stack>
@@ -187,10 +187,10 @@ const ReferralPage = () => {
                                                 direction="row" 
                                                 spacing={1} 
                                                 sx={{ 
-                                                    background: 'var(--bg)', 
+                                                    background: 'background.default', 
                                                     p: 0.75, 
                                                     borderRadius: '10px', 
-                                                    border: '1px solid var(--border)',
+                                                    border: '1px solid divider',
                                                     width: '100%',
                                                     maxWidth: { sm: 400 }
                                                 }}
@@ -202,7 +202,7 @@ const ReferralPage = () => {
                                                         overflow: 'hidden', 
                                                         textOverflow: 'ellipsis', 
                                                         whiteSpace: 'nowrap',
-                                                        color: 'var(--text-muted)',
+                                                        color: 'text.secondary',
                                                         alignSelf: 'center',
                                                         pl: 1
                                                     }}
@@ -213,7 +213,7 @@ const ReferralPage = () => {
                                                     <IconButton 
                                                         size="small" 
                                                         onClick={() => handleCopy(link, slot._id)}
-                                                        sx={{ color: copiedId === slot._id ? '#16a34a' : 'var(--primary)' }}
+                                                        sx={{ color: copiedId === slot._id ? '#16a34a' : 'primary.main' }}
                                                     >
                                                         {copiedId === slot._id ? <CheckCircle size={18} /> : <Copy size={18} />}
                                                     </IconButton>

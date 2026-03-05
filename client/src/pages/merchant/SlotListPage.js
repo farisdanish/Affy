@@ -53,10 +53,10 @@ const SlotListPage = () => {
                 }}
             >
                 <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700, color: 'var(--text)' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary' }}>
                         {isAdminScope ? 'All Slots' : 'My Slots'}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         {isAdminScope 
                             ? 'Manage all booking slots across the platform.' 
                             : 'Create and manage your available booking slots.'}
@@ -77,7 +77,7 @@ const SlotListPage = () => {
                 <Alert 
                     severity="error" 
                     icon={<AlertCircle size={20} />}
-                    sx={{ mb: 3, borderRadius: 'var(--radius)' }}
+                    sx={{ mb: 3, borderRadius: '12px' }}
                 >
                     {error}
                 </Alert>
@@ -102,7 +102,7 @@ const SlotListPage = () => {
                             sx={{ 
                                 p: 0,
                                 overflow: 'hidden',
-                                '&:hover': { borderColor: 'var(--primary)' }
+                                '&:hover': { borderColor: 'primary.main' }
                             }}
                         >
                             <Box sx={{ p: 3 }}>
@@ -110,7 +110,7 @@ const SlotListPage = () => {
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
-                                                <Typography variant="h6" sx={{ fontWeight: 600, color: 'var(--text)' }}>
+                                                <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                     {slot.title}
                                                 </Typography>
                                                 <AppBadge 
@@ -119,25 +119,25 @@ const SlotListPage = () => {
                                                     size="sm"
                                                 />
                                             </Stack>
-                                            <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: 1 }}>
+                                            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
                                                 {slot.description || 'No description provided for this slot.'}
                                             </Typography>
-                                            <Stack direction="row" spacing={2} sx={{ color: 'var(--text-muted)' }}>
+                                            <Stack direction="row" spacing={2} sx={{ color: 'text.secondary' }}>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <Clock size={14} />
-                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                                         {slot.startTime ? new Date(slot.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                                                     </Typography>
                                                 </Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <MapPin size={14} />
-                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                                         {slot.locationLabel || 'Remote'}
                                                     </Typography>
                                                 </Stack>
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                                     <DollarSign size={14} />
-                                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                                         {slot.price || 0}
                                                     </Typography>
                                                 </Stack>

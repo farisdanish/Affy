@@ -21,10 +21,10 @@ const AppTable = ({
         <TableContainer 
             component={Paper} 
             sx={{ 
-                borderRadius: 'var(--radius)', 
-                border: '1px solid var(--border)',
+                borderRadius: '12px', 
+                border: '1px solid divider',
                 boxShadow: 'none',
-                background: 'var(--bg-card)',
+                background: 'background.paper',
                 ...sx 
             }}
         >
@@ -37,8 +37,8 @@ const AppTable = ({
                                 align={column.align || 'left'}
                                 sx={{ 
                                     fontWeight: 700, 
-                                    color: 'var(--text)',
-                                    borderBottom: '1px solid var(--border)',
+                                    color: 'text.primary',
+                                    borderBottom: '1px solid divider',
                                     py: 2
                                 }}
                             >
@@ -51,7 +51,7 @@ const AppTable = ({
                     {data.length === 0 ? (
                         <TableRow>
                             <TableCell colSpan={columns.length} align="center" sx={{ py: 8, border: 'none' }}>
-                                <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                     {emptyMessage}
                                 </Typography>
                             </TableCell>
@@ -72,8 +72,8 @@ const AppTable = ({
                                         key={column.id}
                                         align={column.align || 'left'}
                                         sx={{ 
-                                            color: 'var(--text)',
-                                            borderBottom: '1px solid var(--border)',
+                                            color: 'text.primary',
+                                            borderBottom: '1px solid divider',
                                             py: 2
                                         }}
                                     >

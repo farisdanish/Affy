@@ -18,9 +18,9 @@ const AppAvatar = ({ name, src, size = 40, sx = {}, ...props }) => {
                 height: size,
                 fontSize: size * 0.4,
                 fontWeight: 600,
-                bgcolor: 'var(--primary-light)',
-                color: 'var(--primary)',
-                border: '1px solid var(--border)',
+                bgcolor: 'primary.light',
+                color: 'primary.main',
+                border: '1px solid divider',
                 ...sx,
             }}
             {...props}

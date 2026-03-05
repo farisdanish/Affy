@@ -42,7 +42,7 @@ const BookSlotPage = () => {
         <AppCard sx={{ maxWidth: 640 }}>
             <CardContent>
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>Book Slot</Typography>
-                <Typography variant="body2" sx={{ mb: 2, color: 'var(--text-muted)' }}>
+                <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
                     Slot ID: {slotId}
                 </Typography>
                 {refCode && (

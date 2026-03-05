@@ -21,7 +21,7 @@ const SlotCatalogPage = () => {
                 <AppCard key={slot._id}>
                     <CardContent>
                         <Typography variant="h6">{slot.title}</Typography>
-                        <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: 1 }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
                             {slot.description || 'No description'}
                         </Typography>
                         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>

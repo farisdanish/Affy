@@ -88,7 +88,7 @@ const SlotFormPage = () => {
     return (
         <AppCard sx={{ maxWidth: 760, mx: 'auto' }}>
             <CardContent>
-                <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, color: 'var(--text)' }}>
+                <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, color: 'text.primary' }}>
                     {isEdit ? 'Edit Slot' : 'Create Slot'}
                 </Typography>
                 {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}

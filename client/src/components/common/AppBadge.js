@@ -12,8 +12,8 @@ const AppBadge = ({
     const getColorStyles = () => {
         const colors = {
             primary: {
-                bg: 'var(--primary-light)',
-                text: 'var(--primary)',
+                bg: 'primary.light',
+                text: 'primary.main',
                 border: 'rgba(249, 115, 22, 0.2)',
             },
             success: {
@@ -38,8 +38,8 @@ const AppBadge = ({
             },
             neutral: {
                 bg: 'rgba(120, 113, 108, 0.12)',
-                text: 'var(--text-muted)',
-                border: 'var(--border)',
+                text: 'text.secondary',
+                border: 'divider',
             }
         };
 

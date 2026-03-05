@@ -29,7 +29,7 @@ import {
 import { adminTheme, publicTheme } from '../../theme';
 
 const actionTones = {
-    primary: { icon: 'var(--primary)', bg: 'var(--primary-light)' },
+    primary: { icon: 'primary.main', bg: 'primary.light' },
     success: { icon: '#16a34a', bg: 'rgba(34, 197, 94, 0.12)' },
     info: { icon: '#2563eb', bg: 'rgba(59, 130, 246, 0.12)' },
 };
@@ -185,7 +185,7 @@ const Dashboard = () => {
                                             transition: 'transform 0.2s ease, border-color 0.2s ease',
                                             '&:hover': {
                                                 transform: 'translateY(-4px)',
-                                                borderColor: 'var(--primary)',
+                                                borderColor: 'primary.main',
                                             }
                                         }}
                                         onClick={() => navigate(action.path)}
