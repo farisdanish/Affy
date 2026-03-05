@@ -6,23 +6,16 @@ import { publicTheme, adminTheme } from '../../theme';
 import AppNavbar from './AppNavbar';
 
 const PublicLayout = () => {
-    const { isAuthenticated, user } = useAuth();
+    const { user } = useAuth();
     const role = user?.role || 'user';
 
     const theme = ['admin', 'merchant', 'developer'].includes(role) ? adminTheme : publicTheme;
-
-    const navItems = [
-        { label: 'Slots', to: '/slots' },
-        isAuthenticated
-            ? { label: 'Dashboard', to: '/dashboard' }
-            : { label: 'Login', to: '/login' },
-    ];
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
-                <AppNavbar title="Affy" navItems={navItems} />
+                <AppNavbar />
                 <Box sx={{ p: { xs: 2, md: 4 } }}>
                     <Outlet />
                 </Box>
