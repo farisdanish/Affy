@@ -119,18 +119,30 @@ const Dashboard = () => {
                 </Box>
 
                 <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 2, md: 3 } }}>
-                    {/* Welcome Section */}
-                    <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
-                        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-                            <AppAvatar name={user?.name} size={56} />
+                    {/* Welcome Section Hero */}
+                    <Box
+                        sx={{
+                            mb: 5,
+                            p: { xs: 3, md: 4 },
+                            borderRadius: '24px',
+                            background: theme.palette.mode === 'dark'
+                                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(0,0,0,0) 100%)'
+                                : 'linear-gradient(135deg, #eef2ff 0%, #ffffff 100%)',
+                            border: '1px solid',
+                            borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : '#e0e7ff',
+                            boxShadow: theme.palette.mode === 'light' ? '0 10px 40px -10px rgba(79, 70, 229, 0.1)' : 'none'
+                        }}
+                    >
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
+                            <AppAvatar name={user?.name} size={72} />
                             <Box>
-                                <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.15 }}>
-                                    Hello, {user?.name?.split(' ')[0] || 'User'}!
+                                <Typography variant="h4" sx={{ fontWeight: 800, mb: 0.5, letterSpacing: '-0.5px' }}>
+                                    Welcome back, {user?.name?.split(' ')[0] || 'User'}!
                                 </Typography>
-                                <Stack direction="row" spacing={1} alignItems="center">
-                                    <AppBadge label={roleLabel} color="primary" size="sm" />
-                                    <Typography variant="body2" color="text.secondary">
-                                        Welcome to your workspace dashboard.
+                                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 1 }}>
+                                    <AppBadge label={roleLabel} color="primary" size="md" />
+                                    <Typography variant="body1" color="text.secondary">
+                                        Ready to manage your workspace and discover new opportunities?
                                     </Typography>
                                 </Stack>
                             </Box>

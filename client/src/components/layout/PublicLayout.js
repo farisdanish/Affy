@@ -2,13 +2,16 @@ import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { AppBar, Box, Button, Toolbar, Typography, ThemeProvider, CssBaseline } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
-import { publicTheme } from '../../theme';
+import { publicTheme, adminTheme } from '../../theme';
 
 const PublicLayout = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    const role = user?.role || 'user';
+
+    const theme = ['admin', 'merchant', 'developer'].includes(role) ? adminTheme : publicTheme;
 
     return (
-        <ThemeProvider theme={publicTheme}>
+        <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
                 <AppBar
