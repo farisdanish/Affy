@@ -118,7 +118,7 @@ const Dashboard = () => {
                     </Container>
                 </Box>
 
-                <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 2, md: 3 } }}>
+                <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
                     {/* Welcome Section Hero */}
                     <Box
                         sx={{
@@ -173,14 +173,12 @@ const Dashboard = () => {
                     )}
 
                     {/* Quick Actions */}
-                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, px: { xs: 2, sm: 0 } }}>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                         Quick Actions
                     </Typography>
                     <Grid
                         container
-                        columnSpacing={{ xs: 2, md: 3 }}
-                        rowSpacing={{ xs: 2, md: 3 }}
-                        sx={{ px: { xs: 2, sm: 0 } }}
+                        spacing={3}
                     >
                         {getRoleActions().map((action, idx) => {
                             const tone = actionTones[action.color] || actionTones.primary;
@@ -246,7 +244,7 @@ const Dashboard = () => {
                     </Grid>
                 </Container>
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 };
 
