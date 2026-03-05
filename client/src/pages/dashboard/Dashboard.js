@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import statsService from '../../services/statsService';
 import {
     Box,
     Grid,
     Stack,
     Typography,
-    Container
+    Container,
+    CircularProgress
 } from '@mui/material';
 import {
     Calendar,
@@ -32,8 +34,29 @@ const actionTones = {
 const Dashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [stats, setStats] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const role = user?.role || 'user';
+    const isPrivileged = ['admin', 'merchant', 'developer'].includes(role);
+
+    useEffect(() => {
+        if (isPrivileged) {
+            const fetchStats = async () => {
+                setLoading(true);
+                try {
+                    const data = await statsService.getStats();
+                    setStats(data);
+                } catch (err) {
+                    console.error('Failed to fetch dashboard stats');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchStats();
+        }
+    }, [isPrivileged]);
+
     const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
     const theme = ['admin', 'merchant', 'developer'].includes(role) ? adminTheme : publicTheme;
@@ -101,27 +124,58 @@ const Dashboard = () => {
             </Box>
 
             {/* Stats Grid - Visible only to privileged roles */}
-            {['admin', 'merchant', 'developer'].includes(role) && (
-                <Grid
-                    container
-                    columnSpacing={{ xs: 0, sm: 2, md: 3 }}
-                    rowSpacing={{ xs: 2, md: 3 }}
-                    sx={{ mb: 5 }}
-                >
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
-                    </Grid>
-                </Grid>
+            {isPrivileged && (
+                <Box sx={{ mb: 5, minHeight: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {loading ? (
+                        <CircularProgress size={40} thickness={4} />
+                    ) : stats ? (
+                        <Grid
+                            container
+                            columnSpacing={{ xs: 0, sm: 2, md: 3 }}
+                            rowSpacing={{ xs: 2, md: 3 }}
+                        >
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                <StatsCard
+                                    label="Total Bookings"
+                                    value={stats.totalBookings.toLocaleString()}
+                                    icon={Calendar}
+                                    trend={12}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                <StatsCard
+                                    label="Active Referrals"
+                                    value={stats.activeReferrals.toLocaleString()}
+                                    icon={LinkIcon}
+                                    color="success"
+                                    trend={8}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                <StatsCard
+                                    label={role === 'merchant' ? 'Unique Customers' : 'New Users'}
+                                    value={stats.totalUsers.toLocaleString()}
+                                    icon={Users}
+                                    color="info"
+                                    trend={-3}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                <StatsCard
+                                    label="Revenue"
+                                    value={`$${stats.totalRevenue.toLocaleString()}`}
+                                    icon={TrendingUp}
+                                    color="primary"
+                                    trend={24}
+                                />
+                            </Grid>
+                        </Grid>
+                    ) : (
+                        <Typography color="text.secondary">Failed to load statistics</Typography>
+                    )}
+                </Box>
             )}
+
 
             {/* Quick Actions */}
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>

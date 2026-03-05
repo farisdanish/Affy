@@ -94,6 +94,8 @@ app.use('/api/v1/slots', require('../routes/slots'));
 app.use('/api/v1/bookings', require('../routes/bookings'));
 app.use('/api/v1/referrals', require('../routes/referrals'));
 app.use('/api/v1/activity-logs', require('../routes/activityLogs'));
+app.use('/api/v1/stats', require('../routes/stats'));
+
 
 // L1: Global error handler — strip internal details in production
 app.use((err, req, res, _next) => {
