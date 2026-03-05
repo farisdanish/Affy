@@ -157,16 +157,16 @@ const Dashboard = () => {
                             rowSpacing={{ xs: 2, md: 3 }}
                             sx={{ mb: 5 }}
                         >
-                            <Grid item xs={12} sm={6} md={3}>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
                             </Grid>
-                            <Grid item xs={12} sm={6} md={3}>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
                             </Grid>
-                            <Grid item xs={12} sm={6} md={3}>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
                             </Grid>
-                            <Grid item xs={12} sm={6} md={3}>
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
                             </Grid>
                         </Grid>
@@ -183,7 +183,7 @@ const Dashboard = () => {
                         {getRoleActions().map((action, idx) => {
                             const tone = actionTones[action.color] || actionTones.primary;
                             return (
-                                <Grid item xs={12} md={4} key={idx}>
+                                <Grid size={{ xs: 12, md: 4 }} key={idx}>
                                     <AppCard
                                         sx={{
                                             p: { xs: 2.5, md: 3 },

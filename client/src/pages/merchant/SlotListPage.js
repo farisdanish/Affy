@@ -1,26 +1,26 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Box, Stack, Typography, Grid } from '@mui/material';
-import { 
-    Calendar, 
-    Plus, 
-    Edit2, 
-    Trash2, 
-    Clock, 
-    MapPin, 
+import {
+    Calendar,
+    Plus,
+    Edit2,
+    Trash2,
+    Clock,
+    MapPin,
     DollarSign,
     AlertCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import useSlots from '../../hooks/useSlots';
 import { deactivateSlot, getMySlots } from '../../services/slotsService';
-import { 
-    AppButton, 
-    AppCard, 
-    ConfirmDialog, 
-    EmptyState, 
+import {
+    AppButton,
+    AppCard,
+    ConfirmDialog,
+    EmptyState,
     LoadingSpinner,
-    AppBadge 
+    AppBadge
 } from '../../components/common';
 
 const SlotListPage = () => {
@@ -57,13 +57,13 @@ const SlotListPage = () => {
                         {isAdminScope ? 'All Slots' : 'My Slots'}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {isAdminScope 
-                            ? 'Manage all booking slots across the platform.' 
+                        {isAdminScope
+                            ? 'Manage all booking slots across the platform.'
                             : 'Create and manage your available booking slots.'}
                     </Typography>
                 </Box>
-                <AppButton 
-                    component={Link} 
+                <AppButton
+                    component={Link}
                     to="/workspace/slots/new"
                     startIcon={Plus}
                     sx={{ alignSelf: { xs: 'stretch', sm: 'auto' } }}
@@ -74,15 +74,15 @@ const SlotListPage = () => {
 
             {loading && <LoadingSpinner />}
             {error && (
-                <Alert 
-                    severity="error" 
+                <Alert
+                    severity="error"
                     icon={<AlertCircle size={20} />}
                     sx={{ mb: 3, borderRadius: '12px' }}
                 >
                     {error}
                 </Alert>
             )}
-            
+
             {!loading && slots.length === 0 && (
                 <EmptyState
                     icon={Calendar}
@@ -97,9 +97,9 @@ const SlotListPage = () => {
 
             <Grid container spacing={3}>
                 {slots.map((slot) => (
-                    <Grid item xs={12} key={slot._id}>
-                        <AppCard 
-                            sx={{ 
+                    <Grid size={{ xs: 12 }} key={slot._id}>
+                        <AppCard
+                            sx={{
                                 p: 0,
                                 overflow: 'hidden',
                                 '&:hover': { borderColor: 'primary.main' }
@@ -107,14 +107,14 @@ const SlotListPage = () => {
                         >
                             <Box sx={{ p: 3 }}>
                                 <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Stack spacing={1}>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
                                                 <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
                                                     {slot.title}
                                                 </Typography>
-                                                <AppBadge 
-                                                    label={slot.isActive ? 'Active' : 'Inactive'} 
+                                                <AppBadge
+                                                    label={slot.isActive ? 'Active' : 'Inactive'}
                                                     color={slot.isActive ? 'success' : 'neutral'}
                                                     size="sm"
                                                 />
@@ -144,10 +144,10 @@ const SlotListPage = () => {
                                             </Stack>
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid size={{ xs: 12, md: 6 }}>
                                         <Stack direction="row" spacing={1.5} justifyContent={{ xs: 'flex-start', md: 'flex-end' }}>
-                                            <AppButton 
-                                                variant="outlined" 
+                                            <AppButton
+                                                variant="outlined"
                                                 size="small"
                                                 startIcon={Edit2}
                                                 onClick={() => navigate(`/workspace/slots/${slot._id}/edit`)}
@@ -161,12 +161,12 @@ const SlotListPage = () => {
                                                 startIcon={Trash2}
                                                 disabled={!slot.isActive}
                                                 onClick={() => setSelectedSlotId(slot._id)}
-                                                sx={{ 
-                                                    '&:hover': { 
-                                                        borderColor: '#dc2626', 
+                                                sx={{
+                                                    '&:hover': {
+                                                        borderColor: '#dc2626',
                                                         color: '#dc2626',
                                                         background: 'rgba(239, 68, 68, 0.05)'
-                                                    } 
+                                                    }
                                                 }}
                                             >
                                                 Deactivate

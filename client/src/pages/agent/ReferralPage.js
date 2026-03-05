@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, Box, Stack, Typography, Grid, Tooltip, IconButton } from '@mui/material';
-import { 
-    Copy, 
-    ExternalLink, 
-    CheckCircle, 
+import {
+    Copy,
+    ExternalLink,
+    CheckCircle,
     AlertCircle,
     Share2,
     Calendar,
@@ -13,10 +13,10 @@ import useReferrals from '../../hooks/useReferrals';
 import useSlots from '../../hooks/useSlots';
 import { getMyRefCode, generateReferralLink } from '../../services/referralsService';
 import { getPublicSlots } from '../../services/slotsService';
-import { 
-    AppButton, 
-    AppCard, 
-    LoadingSpinner, 
+import {
+    AppButton,
+    AppCard,
+    LoadingSpinner,
     EmptyState
 } from '../../components/common';
 
@@ -60,9 +60,9 @@ const ReferralPage = () => {
             </Box>
 
             <Grid container spacing={3} sx={{ mb: 4 }}>
-                <Grid item xs={12} md={4}>
-                    <AppCard 
-                        sx={{ 
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <AppCard
+                        sx={{
                             height: '100%',
                             background: 'linear-gradient(135deg, background.paper 0%, primary.light 100%)',
                             border: '1px solid primary.light'
@@ -84,8 +84,8 @@ const ReferralPage = () => {
                                             {refCode}
                                         </Typography>
                                         <Tooltip title="Copy referral code">
-                                            <IconButton 
-                                                size="small" 
+                                            <IconButton
+                                                size="small"
                                                 onClick={() => handleCopy(refCode, 'refcode')}
                                                 sx={{ color: 'primary.main' }}
                                             >
@@ -101,24 +101,24 @@ const ReferralPage = () => {
                         </Stack>
                     </AppCard>
                 </Grid>
-                
-                <Grid item xs={12} md={8}>
+
+                <Grid size={{ xs: 12, md: 8 }}>
                     <AppCard sx={{ height: '100%', p: 3 }}>
                         <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>Performance Summary</Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={6} sm={3}>
+                            <Grid size={{ xs: 6, sm: 3 }}>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Total Clicks</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>1,240</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={3}>
+                            <Grid size={{ xs: 6, sm: 3 }}>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Conversions</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>42</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={3}>
+                            <Grid size={{ xs: 6, sm: 3 }}>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Conv. Rate</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700, color: '#16a34a' }}>3.4%</Typography>
                             </Grid>
-                            <Grid item xs={6} sm={3}>
+                            <Grid size={{ xs: 6, sm: 3 }}>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>Earned</Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>$420.00</Typography>
                             </Grid>
@@ -128,7 +128,7 @@ const ReferralPage = () => {
             </Grid>
 
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Available Slots for Promotion</Typography>
-            
+
             {actionError && (
                 <Alert severity="error" icon={<AlertCircle size={20} />} sx={{ mb: 2, borderRadius: '12px' }}>
                     {actionError}
@@ -139,9 +139,9 @@ const ReferralPage = () => {
             {slotsError && <Alert severity="error" sx={{ mb: 2 }}>{slotsError}</Alert>}
 
             {!slotsLoading && slots.length === 0 && (
-                <EmptyState 
-                    icon={Calendar} 
-                    title="No slots available" 
+                <EmptyState
+                    icon={Calendar}
+                    title="No slots available"
                     description="There are currently no active slots to promote. Check back later."
                 />
             )}
@@ -150,15 +150,15 @@ const ReferralPage = () => {
                 {slots.map((slot) => {
                     const link = generatedLinks[slot._id];
                     return (
-                        <AppCard 
-                            key={slot._id} 
-                            sx={{ 
+                        <AppCard
+                            key={slot._id}
+                            sx={{
                                 p: 3,
                                 '&:hover': { borderColor: 'primary.light' }
                             }}
                         >
                             <Grid container spacing={3} alignItems="center">
-                                <Grid item xs={12} md={5}>
+                                <Grid size={{ xs: 12, md: 5 }}>
                                     <Stack spacing={0.5}>
                                         <Typography variant="h6" sx={{ fontWeight: 600 }}>{slot.title}</Typography>
                                         <Typography variant="body2" sx={{ color: 'text.secondary', lineClamp: 1 }}>
@@ -166,16 +166,16 @@ const ReferralPage = () => {
                                         </Typography>
                                     </Stack>
                                 </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <Stack 
-                                        direction={{ xs: 'column', sm: 'row' }} 
-                                        spacing={2} 
+                                <Grid size={{ xs: 12, md: 7 }}>
+                                    <Stack
+                                        direction={{ xs: 'column', sm: 'row' }}
+                                        spacing={2}
                                         alignItems={{ xs: 'stretch', sm: 'center' }}
                                         justifyContent="flex-end"
                                     >
                                         {!link ? (
-                                            <AppButton 
-                                                variant="contained" 
+                                            <AppButton
+                                                variant="contained"
                                                 size="small"
                                                 startIcon={Share2}
                                                 onClick={() => handleGenerate(slot._id)}
@@ -183,24 +183,24 @@ const ReferralPage = () => {
                                                 Generate Link
                                             </AppButton>
                                         ) : (
-                                            <Stack 
-                                                direction="row" 
-                                                spacing={1} 
-                                                sx={{ 
-                                                    background: 'background.default', 
-                                                    p: 0.75, 
-                                                    borderRadius: '10px', 
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                sx={{
+                                                    background: 'background.default',
+                                                    p: 0.75,
+                                                    borderRadius: '10px',
                                                     border: '1px solid divider',
                                                     width: '100%',
                                                     maxWidth: { sm: 400 }
                                                 }}
                                             >
-                                                <Typography 
-                                                    variant="caption" 
-                                                    sx={{ 
-                                                        flex: 1, 
-                                                        overflow: 'hidden', 
-                                                        textOverflow: 'ellipsis', 
+                                                <Typography
+                                                    variant="caption"
+                                                    sx={{
+                                                        flex: 1,
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
                                                         color: 'text.secondary',
                                                         alignSelf: 'center',
@@ -210,8 +210,8 @@ const ReferralPage = () => {
                                                     {link}
                                                 </Typography>
                                                 <Tooltip title={copiedId === slot._id ? 'Copied!' : 'Copy to clipboard'}>
-                                                    <IconButton 
-                                                        size="small" 
+                                                    <IconButton
+                                                        size="small"
                                                         onClick={() => handleCopy(link, slot._id)}
                                                         sx={{ color: copiedId === slot._id ? '#16a34a' : 'primary.main' }}
                                                     >
@@ -220,8 +220,8 @@ const ReferralPage = () => {
                                                 </Tooltip>
                                             </Stack>
                                         )}
-                                        <AppButton 
-                                            variant="outlined" 
+                                        <AppButton
+                                            variant="outlined"
                                             size="small"
                                             startIcon={ExternalLink}
                                             onClick={() => window.open(`/book/${slot._id}`, '_blank')}

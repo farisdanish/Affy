@@ -38,7 +38,7 @@ const SlotCatalogPage = () => {
             {/* Catalog Grid */}
             <Grid container spacing={3}>
                 {slots.map((slot) => (
-                    <Grid item xs={12} sm={6} md={4} key={slot._id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={slot._id}>
                         <AppCard
                             sx={{
                                 height: '100%',
