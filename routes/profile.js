@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { sendError } = require('../utils/apiError');
-const authenticateToken = require('../middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/auth');
 
 // GET /profile
 router.get('/', authenticateToken, async (req, res) => {
@@ -23,11 +23,26 @@ router.put('/', authenticateToken, async (req, res) => {
         const userRole = req.user.role;
         const body = req.body || {};
 
-        // Create an update object, ensuring users can't modify structural paths like 'role'
         let updateFields = {};
 
-        // For Merchant, Admin, Developer: update merchant profile
-        if (['merchant', 'admin', 'developer'].includes(userRole) && body.merchantProfile) {
+        // Allow updating common fields
+        if (body.name !== undefined) updateFields.name = body.name;
+
+        // Handle unique field updates (Email/Username)
+        if (body.email) {
+            const emailExists = await User.findOne({ email: body.email, _id: { $ne: req.user.id } });
+            if (emailExists) return sendError(res, 400, 'Email already in use', 'EMAIL_ALREADY_IN_USE');
+            updateFields.email = body.email;
+        }
+
+        if (body.username) {
+            const usernameExists = await User.findOne({ username: body.username, _id: { $ne: req.user.id } });
+            if (usernameExists) return sendError(res, 400, 'Username already taken', 'USERNAME_ALREADY_TAKEN');
+            updateFields.username = body.username;
+        }
+
+        // For Merchant, Developer: update merchant profile
+        if (['merchant', 'developer'].includes(userRole) && body.merchantProfile) {
             updateFields['merchantProfile.place'] = body.merchantProfile.place;
             updateFields['merchantProfile.contactInfo'] = body.merchantProfile.contactInfo;
         }
@@ -38,11 +53,16 @@ router.put('/', authenticateToken, async (req, res) => {
             updateFields['payoutConfig.accountNumber'] = body.payoutConfig.accountNumber;
         }
 
+        if (Object.keys(updateFields).length === 0) {
+            const user = await User.findById(req.user.id).select('-password');
+            return res.json(user);
+        }
+
         // Find and update user, return updated doc
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             { $set: updateFields },
-            { new: true }
+            { new: true, runValidators: true }
         ).select('-password');
 
         if (!updatedUser) {

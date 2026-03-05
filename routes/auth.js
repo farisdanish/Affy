@@ -103,7 +103,31 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email, username: user.username, role: user.role } });
+  } catch (err) {
+    return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
+  }
+});
+
+// GET /auth/check-availability
+router.get('/check-availability', async (req, res) => {
+  try {
+    const { field, value, excludeId } = req.query;
+    if (!field || !value) {
+      return sendError(res, 400, 'field and value are required', 'MISSING_PARAMS');
+    }
+
+    if (!['email', 'username'].includes(field)) {
+      return sendError(res, 400, 'invalid field', 'INVALID_FIELD');
+    }
+
+    const query = { [field]: value };
+    if (excludeId) {
+      query._id = { $ne: excludeId };
+    }
+
+    const existing = await User.findOne(query);
+    res.json({ available: !existing });
   } catch (err) {
     return sendError(res, 500, 'Internal server error', 'INTERNAL_ERROR', err.message);
   }
