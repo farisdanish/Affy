@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { AppBar, Box, Button, Stack, Toolbar, Typography, ThemeProvider, CssBaseline } from '@mui/material';
+import { AppBar, Box, Button, Stack, Toolbar, Typography, ThemeProvider, CssBaseline, Menu, MenuItem, IconButton } from '@mui/material';
+import { Menu as MenuIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { adminTheme } from '../../theme';
 
@@ -12,6 +13,17 @@ const MerchantLayout = () => {
         : user?.role === 'developer'
             ? 'Developer'
             : 'Merchant';
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
         logout();
@@ -35,9 +47,31 @@ const MerchantLayout = () => {
                                     {roleTitle}
                                 </Typography>
                                 <Stack direction="row" spacing={0.5} alignItems="center">
-                                    <Button onClick={handleLogout} color="inherit" sx={{ minWidth: 0 }}>
+                                    <Button onClick={handleLogout} color="inherit" sx={{ minWidth: 0, display: { xs: 'none', md: 'inline-flex' } }}>
                                         Logout
                                     </Button>
+                                    <IconButton
+                                        color="inherit"
+                                        onClick={handleMenuClick}
+                                        sx={{ display: { xs: 'flex', md: 'none' } }}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleMenuClose}
+                                        PaperProps={{
+                                            sx: { width: 220 }
+                                        }}
+                                    >
+                                        <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>Dashboard</MenuItem>
+                                        <MenuItem component={Link} to="/workspace/slots" onClick={handleMenuClose}>
+                                            {user?.role === 'admin' || user?.role === 'developer' ? 'All Slots' : 'My Slots'}
+                                        </MenuItem>
+                                        <MenuItem component={Link} to="/workspace/slots/new" onClick={handleMenuClose}>Create Slot</MenuItem>
+                                        <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>Logout</MenuItem>
+                                    </Menu>
                                 </Stack>
                             </Stack>
 
@@ -50,6 +84,7 @@ const MerchantLayout = () => {
                                     pb: 0.5,
                                     scrollbarWidth: 'none',
                                     '&::-webkit-scrollbar': { display: 'none' },
+                                    display: { xs: 'none', md: 'flex' }
                                 }}
                             >
                                 <Button component={Link} to="/dashboard" color="inherit" sx={{ whiteSpace: 'nowrap' }}>

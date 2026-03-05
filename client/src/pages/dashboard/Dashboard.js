@@ -8,7 +8,10 @@ import {
     Typography,
     Container,
     ThemeProvider,
-    CssBaseline
+    CssBaseline,
+    Menu,
+    MenuItem,
+    IconButton
 } from '@mui/material';
 import {
     LayoutDashboard,
@@ -17,7 +20,8 @@ import {
     Users,
     Link as LinkIcon,
     TrendingUp,
-    ChevronRight
+    ChevronRight,
+    Menu as MenuIcon
 } from 'lucide-react';
 import {
     AppButton,
@@ -37,6 +41,16 @@ const actionTones = {
 const Dashboard = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const role = user?.role || 'user';
     const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
@@ -113,6 +127,32 @@ const Dashboard = () => {
                                 >
                                     Logout
                                 </AppButton>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={handleMenuClick}
+                                    sx={{ display: { xs: 'flex', sm: 'none' } }}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleMenuClose}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                >
+                                    <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>
+                                        <LogOut size={16} style={{ marginRight: 8 }} />
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
                             </Stack>
                         </Stack>
                     </Container>

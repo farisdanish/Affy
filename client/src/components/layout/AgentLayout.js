@@ -1,12 +1,24 @@
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { AppBar, Box, Button, Toolbar, Typography, ThemeProvider, CssBaseline } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography, ThemeProvider, CssBaseline, Menu, MenuItem, IconButton } from '@mui/material';
+import { Menu as MenuIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { publicTheme } from '../../theme';
 
 const AgentLayout = () => {
     const { logout } = useAuth();
     const navigate = useNavigate();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
         logout();
@@ -25,9 +37,30 @@ const AgentLayout = () => {
                 >
                     <Toolbar sx={{ gap: 2 }}>
                         <Typography variant="h6" sx={{ flexGrow: 1 }}>Agent</Typography>
-                        <Button component={Link} to="/agent/referrals" color="inherit">Referrals</Button>
-                        <Button component={Link} to="/slots" color="inherit">Browse Slots</Button>
-                        <Button onClick={handleLogout} color="inherit">Logout</Button>
+                        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+                            <Button component={Link} to="/agent/referrals" color="inherit">Referrals</Button>
+                            <Button component={Link} to="/slots" color="inherit">Browse Slots</Button>
+                            <Button onClick={handleLogout} color="inherit">Logout</Button>
+                        </Box>
+                        <IconButton
+                            color="inherit"
+                            onClick={handleMenuClick}
+                            sx={{ display: { xs: 'flex', md: 'none' } }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleMenuClose}
+                            PaperProps={{
+                                sx: { width: 200 }
+                            }}
+                        >
+                            <MenuItem component={Link} to="/agent/referrals" onClick={handleMenuClose}>Referrals</MenuItem>
+                            <MenuItem component={Link} to="/slots" onClick={handleMenuClose}>Browse Slots</MenuItem>
+                            <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>Logout</MenuItem>
+                        </Menu>
                     </Toolbar>
                 </AppBar>
                 <Box sx={{ p: { xs: 2, md: 4 } }}>
