@@ -52,11 +52,11 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }) => {
                         >
                             {value}
                         </Typography>
-                        {trend && (
+                        {trend !== undefined && trend !== null && (
                             <Typography 
                                 variant="caption" 
                                 sx={{ 
-                                    color: trend > 0 ? '#16a34a' : '#dc2626',
+                                    color: trend > 0 ? '#16a34a' : trend < 0 ? '#dc2626' : 'text.secondary',
                                     fontWeight: 600
                                 }}
                             >

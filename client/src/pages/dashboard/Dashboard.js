@@ -139,7 +139,7 @@ const Dashboard = () => {
                                     label="Total Bookings"
                                     value={stats.totalBookings.toLocaleString()}
                                     icon={Calendar}
-                                    trend={12}
+                                    trend={stats.trends?.totalBookings}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
@@ -148,7 +148,7 @@ const Dashboard = () => {
                                     value={stats.activeReferrals.toLocaleString()}
                                     icon={LinkIcon}
                                     color="success"
-                                    trend={8}
+                                    trend={stats.trends?.activeReferrals}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
@@ -157,7 +157,7 @@ const Dashboard = () => {
                                     value={stats.totalUsers.toLocaleString()}
                                     icon={Users}
                                     color="info"
-                                    trend={-3}
+                                    trend={stats.trends?.totalUsers}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                                     value={`$${stats.totalRevenue.toLocaleString()}`}
                                     icon={TrendingUp}
                                     color="primary"
-                                    trend={24}
+                                    trend={stats.trends?.totalRevenue}
                                 />
                             </Grid>
                         </Grid>

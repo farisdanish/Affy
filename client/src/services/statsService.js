@@ -7,7 +7,7 @@ import api from './api';
 const statsService = {
     /**
      * Get dashboard stats for the current user
-     * @returns {Promise<Object>} { totalBookings, activeReferrals, totalUsers, totalRevenue }
+     * @returns {Promise<Object>} { totalBookings, activeReferrals, totalUsers, totalRevenue, trends }
      */
     getStats: async () => {
         try {
