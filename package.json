@@ -7,7 +7,8 @@
     "test": "npm run smoke:backend && npm run test:backend",
     "smoke:backend": "node scripts/backend-smoke.js",
     "test:backend": "node --test tests/backend/**/*.test.js",
-    "seed:admin": "node seeders/adminSeeder.js"
+    "seed:admin": "node seeders/adminSeeder.js",
+    "seed": "node seeders/masterSeeder.js"
   },
   "keywords": [],
   "author": "",
