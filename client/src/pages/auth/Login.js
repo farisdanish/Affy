@@ -30,7 +30,7 @@ const inputSx = {
 };
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            await login(email, password);
+            await login(identifier, password);
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -115,13 +115,13 @@ const Login = () => {
 
                         <Box component="form" onSubmit={handleSubmit}>
                             <TextField
-                                id="login-email"
-                                label="Email"
-                                type="email"
+                                id="login-identifier"
+                                label="Email or Username"
+                                type="text"
                                 fullWidth
                                 required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={identifier}
+                                onChange={(e) => setIdentifier(e.target.value)}
                                 sx={inputSx}
                             />
                             <TextField

@@ -21,6 +21,7 @@ import {
     Link as LinkIcon,
     TrendingUp,
     ChevronRight,
+    User as UserIcon,
     Menu as MenuIcon
 } from 'lucide-react';
 import {
@@ -119,6 +120,16 @@ const Dashboard = () => {
 
                             <Stack direction="row" spacing={1} alignItems="center">
                                 <AppButton
+                                    component={Link}
+                                    to="/profile"
+                                    variant="outlined"
+                                    size="small"
+                                    startIcon={UserIcon}
+                                    sx={{ borderRadius: '10px', display: { xs: 'none', sm: 'inline-flex' } }}
+                                >
+                                    Profile
+                                </AppButton>
+                                <AppButton
                                     variant="outlined"
                                     size="small"
                                     onClick={handleLogout}
@@ -148,6 +159,10 @@ const Dashboard = () => {
                                         horizontal: 'right',
                                     }}
                                 >
+                                    <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
+                                        <UserIcon size={16} style={{ marginRight: 8 }} />
+                                        Profile
+                                    </MenuItem>
                                     <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>
                                         <LogOut size={16} style={{ marginRight: 8 }} />
                                         Logout

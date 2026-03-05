@@ -9,6 +9,7 @@ import Unauthorized from '../pages/common/Unauthorized';
 import MerchantLayout from '../components/layout/MerchantLayout';
 import AgentLayout from '../components/layout/AgentLayout';
 import PublicLayout from '../components/layout/PublicLayout';
+import Profile from '../pages/dashboard/Profile';
 import SlotListPage from '../pages/merchant/SlotListPage';
 import SlotFormPage from '../pages/merchant/SlotFormPage';
 import ReferralPage from '../pages/agent/ReferralPage';
@@ -43,6 +44,15 @@ const AppRoutes = () => (
             element={
                 <ProtectedRoute>
                     <Dashboard />
+                </ProtectedRoute>
+            }
+        />
+
+        <Route
+            path="/profile"
+            element={
+                <ProtectedRoute>
+                    <Profile />
                 </ProtectedRoute>
             }
         />

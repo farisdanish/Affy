@@ -79,6 +79,7 @@ app.get('/healthz', async (req, res) => {
 
 // Routes
 app.use('/auth', require('../routes/auth'));
+app.use('/profile', require('../routes/profile'));
 app.use('/slots', require('../routes/slots'));
 app.use('/bookings', require('../routes/bookings'));
 app.use('/referrals', require('../routes/referrals'));

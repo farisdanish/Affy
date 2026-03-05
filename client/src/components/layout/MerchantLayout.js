@@ -47,6 +47,9 @@ const MerchantLayout = () => {
                                     {roleTitle}
                                 </Typography>
                                 <Stack direction="row" spacing={0.5} alignItems="center">
+                                    <Button component={Link} to="/profile" color="inherit" sx={{ minWidth: 0, display: { xs: 'none', md: 'inline-flex' } }}>
+                                        Profile
+                                    </Button>
                                     <Button onClick={handleLogout} color="inherit" sx={{ minWidth: 0, display: { xs: 'none', md: 'inline-flex' } }}>
                                         Logout
                                     </Button>
@@ -70,6 +73,7 @@ const MerchantLayout = () => {
                                             {user?.role === 'admin' || user?.role === 'developer' ? 'All Slots' : 'My Slots'}
                                         </MenuItem>
                                         <MenuItem component={Link} to="/workspace/slots/new" onClick={handleMenuClose}>Create Slot</MenuItem>
+                                        <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profile</MenuItem>
                                         <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>Logout</MenuItem>
                                     </Menu>
                                 </Stack>

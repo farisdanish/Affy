@@ -17,6 +17,14 @@ router.post(
       .withMessage('name is required')
       .isLength({ max: 100 })
       .withMessage('name is too long'),
+    body('username')
+      .trim()
+      .notEmpty()
+      .withMessage('username is required')
+      .isAlphanumeric()
+      .withMessage('username must contain only letters and numbers')
+      .isLength({ min: 3, max: 30 })
+      .withMessage('username must be between 3 and 30 characters'),
     body('email')
       .trim()
       .normalizeEmail()
@@ -40,18 +48,21 @@ router.post(
     }
 
     try {
-      const { name, email, password, role } = req.body || {};
+      const { name, username, email, password, role } = req.body || {};
       const safeRole = sanitizeSelfRegistrationRole(role);
 
       // Check if user already exists
-      const existing = await User.findOne({ email });
-      if (existing) return sendError(res, 400, 'Email already registered', 'EMAIL_ALREADY_REGISTERED');
+      const existing = await User.findOne({ $or: [{ email }, { username }] });
+      if (existing) {
+        if (existing.email === email) return sendError(res, 400, 'Email already registered', 'EMAIL_ALREADY_REGISTERED');
+        if (existing.username === username) return sendError(res, 400, 'Username already taken', 'USERNAME_ALREADY_TAKEN');
+      }
 
       // Hash the password
       const hashed = await bcrypt.hash(password, 10);
 
       // Save user
-      const user = new User({ name, email, password: hashed, role: safeRole });
+      const user = new User({ name, username, email, password: hashed, role: safeRole });
       await user.save();
 
       res.json({ message: 'User registered successfully' });
@@ -64,13 +75,18 @@ router.post(
 // POST /auth/login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body || {};
-    if (!email || !password) {
-      return sendError(res, 400, 'email and password are required', 'MISSING_CREDENTIALS');
+    const { identifier, password } = req.body || {};
+    if (!identifier || typeof identifier !== 'string' || !password) {
+      return sendError(res, 400, 'identifier and password are required', 'MISSING_CREDENTIALS');
     }
 
-    // Find user
-    const user = await User.findOne({ email });
+    // Find user (by email or username)
+    const user = await User.findOne({
+      $or: [
+        { email: identifier },
+        { username: identifier }
+      ]
+    });
     if (!user) return sendError(res, 400, 'Invalid credentials', 'INVALID_CREDENTIALS');
 
     // Check password

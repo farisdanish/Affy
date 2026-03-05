@@ -40,6 +40,7 @@ const AgentLayout = () => {
                         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
                             <Button component={Link} to="/agent/referrals" color="inherit">Referrals</Button>
                             <Button component={Link} to="/slots" color="inherit">Browse Slots</Button>
+                            <Button component={Link} to="/profile" color="inherit">Profile</Button>
                             <Button onClick={handleLogout} color="inherit">Logout</Button>
                         </Box>
                         <IconButton
@@ -59,6 +60,7 @@ const AgentLayout = () => {
                         >
                             <MenuItem component={Link} to="/agent/referrals" onClick={handleMenuClose}>Referrals</MenuItem>
                             <MenuItem component={Link} to="/slots" onClick={handleMenuClose}>Browse Slots</MenuItem>
+                            <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>Profile</MenuItem>
                             <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>Logout</MenuItem>
                         </Menu>
                     </Toolbar>

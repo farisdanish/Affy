@@ -34,6 +34,7 @@ const inputSx = {
 
 const Register = () => {
     const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('user');
@@ -47,7 +48,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            await register(name, email, password, role);
+            await register(name, username, email, password, role);
             navigate('/login', { state: { registered: true } });
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -125,6 +126,16 @@ const Register = () => {
                                 required
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                sx={inputSx}
+                            />
+                            <TextField
+                                id="register-username"
+                                label="Username"
+                                type="text"
+                                fullWidth
+                                required
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 sx={inputSx}
                             />
                             <TextField
