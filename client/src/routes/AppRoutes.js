@@ -9,6 +9,7 @@ import Unauthorized from '../pages/common/Unauthorized';
 import MerchantLayout from '../components/layout/MerchantLayout';
 import AgentLayout from '../components/layout/AgentLayout';
 import PublicLayout from '../components/layout/PublicLayout';
+import DashboardLayout from '../components/layout/DashboardLayout';
 import Profile from '../pages/dashboard/Profile';
 import SlotListPage from '../pages/merchant/SlotListPage';
 import SlotFormPage from '../pages/merchant/SlotFormPage';
@@ -40,22 +41,15 @@ const AppRoutes = () => (
         </Route>
 
         <Route
-            path="/dashboard"
             element={
                 <ProtectedRoute>
-                    <Dashboard />
+                    <DashboardLayout />
                 </ProtectedRoute>
             }
-        />
-
-        <Route
-            path="/profile"
-            element={
-                <ProtectedRoute>
-                    <Profile />
-                </ProtectedRoute>
-            }
-        />
+        >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+        </Route>
 
         <Route
             path="/workspace"

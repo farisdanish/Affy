@@ -1,31 +1,21 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
     Box,
     Grid,
     Stack,
     Typography,
-    Container,
-    ThemeProvider,
-    CssBaseline,
-    Menu,
-    MenuItem,
-    IconButton
+    Container
 } from '@mui/material';
 import {
-    LayoutDashboard,
-    LogOut,
     Calendar,
     Users,
     Link as LinkIcon,
     TrendingUp,
-    ChevronRight,
-    User as UserIcon,
-    Menu as MenuIcon
+    ChevronRight
 } from 'lucide-react';
 import {
-    AppButton,
     AppCard,
     StatsCard,
     AppAvatar,
@@ -40,28 +30,13 @@ const actionTones = {
 };
 
 const Dashboard = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
 
     const role = user?.role || 'user';
     const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
     const theme = ['admin', 'merchant', 'developer'].includes(role) ? adminTheme : publicTheme;
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
 
     const getRoleActions = () => {
         const actions = [];
@@ -94,212 +69,131 @@ const Dashboard = () => {
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary', pb: 8 }}>
-                {/* Header */}
-                <Box
-                    sx={{
-                        borderBottom: 1,
-                        borderColor: 'divider',
-                        bgcolor: 'background.paper',
-                        py: 2,
-                        mb: 4
-                    }}
-                >
-                    <Container maxWidth="lg">
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
-                            <Stack direction="row" spacing={1.5} alignItems="center">
-                                <Box sx={{ color: 'primary.main', display: 'flex' }}>
-                                    <LayoutDashboard size={28} />
-                                </Box>
-                                <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.5px' }}>
-                                    Affy
-                                </Typography>
-                            </Stack>
-
-                            <Stack direction="row" spacing={1} alignItems="center">
-                                <AppButton
-                                    component={Link}
-                                    to="/profile"
-                                    variant="outlined"
-                                    size="small"
-                                    startIcon={UserIcon}
-                                    sx={{ borderRadius: '10px', display: { xs: 'none', sm: 'inline-flex' } }}
-                                >
-                                    Profile
-                                </AppButton>
-                                <AppButton
-                                    variant="outlined"
-                                    size="small"
-                                    onClick={handleLogout}
-                                    startIcon={LogOut}
-                                    sx={{ borderRadius: '10px', display: { xs: 'none', sm: 'inline-flex' } }}
-                                >
-                                    Logout
-                                </AppButton>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={handleMenuClick}
-                                    sx={{ display: { xs: 'flex', sm: 'none' } }}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleMenuClose}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                >
-                                    <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
-                                        <UserIcon size={16} style={{ marginRight: 8 }} />
-                                        Profile
-                                    </MenuItem>
-                                    <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>
-                                        <LogOut size={16} style={{ marginRight: 8 }} />
-                                        Logout
-                                    </MenuItem>
-                                </Menu>
-                            </Stack>
-                        </Stack>
-                    </Container>
-                </Box>
-
-                <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
-                    {/* Welcome Section Hero */}
-                    <Box
-                        sx={{
-                            mb: 5,
-                            p: { xs: 3, md: 4 },
-                            borderRadius: '24px',
-                            background: theme.palette.mode === 'dark'
-                                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(0,0,0,0) 100%)'
-                                : 'linear-gradient(135deg, #eef2ff 0%, #ffffff 100%)',
-                            border: '1px solid',
-                            borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : '#e0e7ff',
-                            boxShadow: theme.palette.mode === 'light' ? '0 10px 40px -10px rgba(79, 70, 229, 0.1)' : 'none'
-                        }}
-                    >
-                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
-                            <AppAvatar name={user?.name} size={72} />
-                            <Box>
-                                <Typography variant="h4" sx={{ fontWeight: 800, mb: 0.5, letterSpacing: '-0.5px' }}>
-                                    Welcome back, {user?.name?.split(' ')[0] || 'User'}!
-                                </Typography>
-                                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 1 }}>
-                                    <AppBadge label={roleLabel} color="primary" size="md" />
-                                    <Typography variant="body1" color="text.secondary">
-                                        Ready to manage your workspace and discover new opportunities?
-                                    </Typography>
-                                </Stack>
-                            </Box>
+        <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 }, pb: 8 }}>
+            {/* Welcome Section Hero */}
+            <Box
+                sx={{
+                    mb: 5,
+                    p: { xs: 3, md: 4 },
+                    borderRadius: '24px',
+                    background: theme.palette.mode === 'dark'
+                        ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(0,0,0,0) 100%)'
+                        : 'linear-gradient(135deg, #eef2ff 0%, #ffffff 100%)',
+                    border: '1px solid',
+                    borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : '#e0e7ff',
+                    boxShadow: theme.palette.mode === 'light' ? '0 10px 40px -10px rgba(79, 70, 229, 0.1)' : 'none'
+                }}
+            >
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
+                    <AppAvatar name={user?.name} size={72} />
+                    <Box>
+                        <Typography variant="h4" sx={{ fontWeight: 800, mb: 0.5, letterSpacing: '-0.5px' }}>
+                            Welcome back, {user?.name?.split(' ')[0] || 'User'}!
+                        </Typography>
+                        <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mt: 1 }}>
+                            <AppBadge label={roleLabel} color="primary" size="md" />
+                            <Typography variant="body1" color="text.secondary">
+                                Ready to manage your workspace and discover new opportunities?
+                            </Typography>
                         </Stack>
                     </Box>
-
-                    {/* Stats Grid - Visible only to privileged roles */}
-                    {['admin', 'merchant', 'developer'].includes(role) && (
-                        <Grid
-                            container
-                            columnSpacing={{ xs: 0, sm: 2, md: 3 }}
-                            rowSpacing={{ xs: 2, md: 3 }}
-                            sx={{ mb: 5 }}
-                        >
-                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                                <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                                <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                                <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                                <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
-                            </Grid>
-                        </Grid>
-                    )}
-
-                    {/* Quick Actions */}
-                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                        Quick Actions
-                    </Typography>
-                    <Grid
-                        container
-                        spacing={3}
-                    >
-                        {getRoleActions().map((action, idx) => {
-                            const tone = actionTones[action.color] || actionTones.primary;
-                            return (
-                                <Grid size={{ xs: 12, md: 4 }} key={idx}>
-                                    <AppCard
-                                        sx={{
-                                            p: { xs: 2.5, md: 3 },
-                                            minHeight: { xs: 188, md: 206 },
-                                            height: '100%',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            cursor: 'pointer',
-                                            transition: 'transform 0.2s ease, border-color 0.2s ease',
-                                            '&:hover': {
-                                                transform: 'translateY(-4px)',
-                                                borderColor: 'primary.main',
-                                            }
-                                        }}
-                                        onClick={() => navigate(action.path)}
-                                    >
-                                        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                                            <Box
-                                                sx={{
-                                                    width: 44,
-                                                    height: 44,
-                                                    borderRadius: '10px',
-                                                    background: tone.bg,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    color: tone.icon,
-                                                    mb: 2
-                                                }}
-                                            >
-                                                <action.icon size={22} />
-                                            </Box>
-                                            <ChevronRight size={18} color="action" />
-                                        </Stack>
-                                        <Typography
-                                            variant="h6"
-                                            sx={{ fontWeight: 600, mb: 0.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                                        >
-                                            {action.title}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                            sx={{
-                                                minHeight: { xs: 44, md: 48 },
-                                                display: '-webkit-box',
-                                                WebkitLineClamp: 2,
-                                                WebkitBoxOrient: 'vertical',
-                                                overflow: 'hidden',
-                                            }}
-                                        >
-                                            {action.description}
-                                        </Typography>
-                                    </AppCard>
-                                </Grid>
-                            );
-                        })}
-                    </Grid>
-                </Container>
+                </Stack>
             </Box>
-        </ThemeProvider >
+
+            {/* Stats Grid - Visible only to privileged roles */}
+            {['admin', 'merchant', 'developer'].includes(role) && (
+                <Grid
+                    container
+                    columnSpacing={{ xs: 0, sm: 2, md: 3 }}
+                    rowSpacing={{ xs: 2, md: 3 }}
+                    sx={{ mb: 5 }}
+                >
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <StatsCard label="Total Bookings" value="128" icon={Calendar} trend={12} />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <StatsCard label="Active Referrals" value="45" icon={LinkIcon} color="success" trend={8} />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <StatsCard label="New Users" value="2,420" icon={Users} color="info" trend={-3} />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                        <StatsCard label="Revenue" value="$12.4k" icon={TrendingUp} color="primary" trend={24} />
+                    </Grid>
+                </Grid>
+            )}
+
+            {/* Quick Actions */}
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+                Quick Actions
+            </Typography>
+            <Grid
+                container
+                spacing={3}
+            >
+                {getRoleActions().map((action, idx) => {
+                    const tone = actionTones[action.color] || actionTones.primary;
+                    return (
+                        <Grid size={{ xs: 12, md: 4 }} key={idx}>
+                            <AppCard
+                                sx={{
+                                    p: { xs: 2.5, md: 3 },
+                                    minHeight: { xs: 188, md: 206 },
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s ease, border-color 0.2s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-4px)',
+                                        borderColor: 'primary.main',
+                                    }
+                                }}
+                                onClick={() => navigate(action.path)}
+                            >
+                                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                                    <Box
+                                        sx={{
+                                            width: 44,
+                                            height: 44,
+                                            borderRadius: '10px',
+                                            background: tone.bg,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: tone.icon,
+                                            mb: 2
+                                        }}
+                                    >
+                                        <action.icon size={22} />
+                                    </Box>
+                                    <ChevronRight size={18} color="action" />
+                                </Stack>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600, mb: 0.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                >
+                                    {action.title}
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    sx={{
+                                        minHeight: { xs: 44, md: 48 },
+                                        display: '-webkit-box',
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    {action.description}
+                                </Typography>
+                            </AppCard>
+                        </Grid>
+                    );
+                })}
+            </Grid>
+        </Container>
     );
 };
 
