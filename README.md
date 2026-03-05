@@ -154,7 +154,7 @@ REACT_APP_API_URL=http://localhost:5000
 
 You can quickly spin up the entire application stack (Frontend, Backend, and a local MongoDB instance) using Docker Compose.
 
-Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed. 
+Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
 From the project root, run:
 
 ```bash
@@ -163,7 +163,7 @@ docker compose up --build
 
 - The React frontend will be available at `http://localhost:3000`
 - The Express backend API will be available at `http://localhost:5000`
-- The local MongoDB instance will be available on port `27017`
+- The local MongoDB instance will be available on port `27018`
 - Hot-reloading is enabled for both frontend and backend through volume mounts.
 
 To stop the containers, press `Ctrl+C` or run:
