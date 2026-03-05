@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 /**
  * Verify JWT from httpOnly cookie (primary) or Authorization header (fallback).
@@ -48,4 +49,46 @@ const authorizeRoles = (...roles) => {
     };
 };
 
-module.exports = { authenticateToken, authorizeRoles };
+const loadMerchantVerification = async (req, res, next) => {
+    if (!req.user || req.user.role !== 'merchant') return next();
+
+    try {
+        const merchant = await User.findById(req.user.id).select('merchantProfile.verificationStatus');
+        if (!merchant) {
+            return res.status(404).json({
+                message: 'User not found.',
+                code: 'USER_NOT_FOUND',
+            });
+        }
+
+        req.merchantVerificationStatus = merchant.merchantProfile?.verificationStatus || 'pending';
+        next();
+    } catch (_err) {
+        return res.status(500).json({
+            message: 'Internal server error.',
+            code: 'INTERNAL_ERROR',
+        });
+    }
+};
+
+const requireVerifiedMerchant = async (req, res, next) => {
+    if (!req.user || req.user.role !== 'merchant') return next();
+
+    try {
+        const status = req.merchantVerificationStatus || (await User.findById(req.user.id).select('merchantProfile.verificationStatus'))?.merchantProfile?.verificationStatus || 'pending';
+        if (status !== 'approved') {
+            return res.status(403).json({
+                message: 'Merchant verification is required for this action.',
+                code: 'MERCHANT_NOT_VERIFIED',
+            });
+        }
+        next();
+    } catch (_err) {
+        return res.status(500).json({
+            message: 'Internal server error.',
+            code: 'INTERNAL_ERROR',
+        });
+    }
+};
+
+module.exports = { authenticateToken, authorizeRoles, loadMerchantVerification, requireVerifiedMerchant };

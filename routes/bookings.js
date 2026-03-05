@@ -65,6 +65,12 @@ router.post('/', bookingRateLimit, bookingValidation, async (req, res) => {
             return sendError(res, 404, 'Slot not found or unavailable', 'SLOT_UNAVAILABLE');
         }
 
+        const slotMerchant = await User.findById(slot.merchant).select('merchantProfile.verificationStatus');
+        const merchantVerificationStatus = slotMerchant?.merchantProfile?.verificationStatus || 'pending';
+        if (resolvedRefInput && merchantVerificationStatus !== 'approved') {
+            return sendError(res, 403, 'Merchant verification is required for referral attribution', 'MERCHANT_NOT_VERIFIED');
+        }
+
         // 4. Resolve agentId server-side from refCode — never trust client
         let resolvedAgentId = null;
         let resolvedRefCode = null;

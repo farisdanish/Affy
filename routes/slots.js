@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Slot = require('../models/Slot');
-const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { authenticateToken, authorizeRoles, loadMerchantVerification } = require('../middleware/auth');
 const { logActivity } = require('../services/activityLogService');
 const { sendError, sendValidationError } = require('../utils/apiError');
 const { buildPublicSlotsQuery, isValidSlotWindow } = require('../utils/slotVisibility');
@@ -48,11 +48,13 @@ router.post(
     '/',
     authenticateToken,
     authorizeRoles('merchant', 'admin', 'developer'),
+    loadMerchantVerification,
     [
         body('title').trim().notEmpty().withMessage('title is required'),
         body('price').optional().isFloat({ min: 0 }).withMessage('price must be a positive number'),
         body('startTime').optional().isISO8601().withMessage('startTime must be a valid date'),
         body('endTime').optional().isISO8601().withMessage('endTime must be a valid date'),
+        body('isActive').optional().isBoolean().withMessage('isActive must be a boolean'),
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -61,6 +63,12 @@ router.post(
         }
         try {
             const { title, description, price, startTime, endTime, capacity, locationLabel } = req.body;
+            const requestedIsActive = req.body.isActive !== undefined ? Boolean(req.body.isActive) : true;
+
+            if (req.user.role === 'merchant' && req.merchantVerificationStatus !== 'approved' && requestedIsActive) {
+                return sendError(res, 403, 'Merchant verification is required before activating slots', 'MERCHANT_NOT_VERIFIED');
+            }
+
             const slot = new Slot({
                 merchant: req.user.id,
                 title,
@@ -70,7 +78,7 @@ router.post(
                 endTime,
                 capacity,
                 locationLabel,
-                isActive: true,
+                isActive: requestedIsActive,
             });
             await slot.save();
             await logActivity({
@@ -93,11 +101,13 @@ router.put(
     '/:id',
     authenticateToken,
     authorizeRoles('merchant', 'admin', 'developer'),
+    loadMerchantVerification,
     [
         body('title').optional().trim().notEmpty().withMessage('title cannot be blank'),
         body('price').optional().isFloat({ min: 0 }).withMessage('price must be a positive number'),
         body('startTime').optional().isISO8601().withMessage('startTime must be a valid date'),
         body('endTime').optional().isISO8601().withMessage('endTime must be a valid date'),
+        body('isActive').optional().isBoolean().withMessage('isActive must be a boolean'),
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -111,6 +121,10 @@ router.put(
             // Owner check
             if (slot.merchant.toString() !== req.user.id && req.user.role !== 'admin' && req.user.role !== 'developer') {
                 return sendError(res, 403, 'Forbidden. You do not own this slot.', 'SLOT_OWNERSHIP_REQUIRED');
+            }
+
+            if (req.user.role === 'merchant' && req.merchantVerificationStatus !== 'approved' && req.body.isActive === true) {
+                return sendError(res, 403, 'Merchant verification is required before activating slots', 'MERCHANT_NOT_VERIFIED');
             }
 
             const allowed = ['title', 'description', 'price', 'startTime', 'endTime', 'isActive', 'capacity', 'locationLabel'];

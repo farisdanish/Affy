@@ -36,6 +36,19 @@ Sprint 1 is complete. Moving to Sprint 2.
 
 Sprint 2 is functionally complete. Moving to Sprint 3.
 
+### Sprint 3 (Monetization Baseline + Any-Merchant Generalization) 🚧
+
+- [x] Generalize merchant profile model for any brick-and-mortar business (not mall-only)
+- [x] Add merchant verification state and metadata (`pending/approved/rejected`, SSM number, docs)
+- [x] Add admin verification API (`pending list`, `approve`, `reject`)
+- [x] Gate slot activation for unverified merchants
+- [x] Gate referral attribution for unverified merchants
+- [ ] Merchant booking operations (view queue + confirm/reject/cancel)
+- [ ] Commission lifecycle baseline (`pending -> approved -> payout-ready`)
+- [ ] Basic anti-fraud flags + manual review markers
+- [ ] Agent/merchant conversion analytics endpoints
+- [ ] CI regression coverage for verification and commission lifecycle
+
 ## Sprint Plan
 
 ### Walking Skeleton (pre-Sprint 1)
@@ -56,11 +69,14 @@ Sprint 2 is functionally complete. Moving to Sprint 3.
 - Public booking flow capturing `ref` and saving it
 - End of Sprint 2 target: first demoable product
 
-### Sprint 3 - Booking Lifecycle + Commission Baseline
-- Merchant booking operations (view queue, confirm/reject bookings)
-- Public booking UX completion (success state + booking reference + duplicate-booking guidance)
-- Agent attribution analytics (per-link/per-slot conversion summary)
-- Commission baseline rules (record commission-ready events on confirmed bookings)
+### Sprint 3 - Booking Lifecycle + Commission Baseline (Any Merchant)
+- Data model generalization for any merchant vertical (salon, clinic, fitness, F&B, retail services)
+- Merchant verification workflow (SSM + documents + admin approval/rejection)
+- Slot/referral monetization gates for unverified merchants
+- Merchant booking operations (view queue, confirm/reject/cancel bookings)
+- Commission baseline rules (approve commission only on confirmed booking events)
+- Basic anti-fraud checks (self-referral/velocity flags + manual review queue)
+- Agent and merchant conversion analytics (bookings vs confirmed vs commission-ready)
 - CI quality hardening (required status checks + regression smoke coverage)
 
 ### Sprint 4 - Affiliate Layer
@@ -70,7 +86,6 @@ Sprint 2 is functionally complete. Moving to Sprint 3.
 
 ### Deferred
 - Admin dashboard/internal tooling
-- Mall directory / indoor navigation
 - UI polish and animations
 
 ## User Roles
@@ -214,6 +229,9 @@ Default admin: `admin@affy.com` / `admin123`
 | `GET` | `/referrals/my-code` | Agent | Get agent referral code (auto-generate if missing) |
 | `POST` | `/referrals/link` | Agent | Generate share URL for a slot |
 | `GET` | `/activity-logs` | Admin/Developer | Paginated activity logs |
+| `GET` | `/merchants/pending-verification` | Admin/Developer | List pending merchant verification requests |
+| `PATCH` | `/merchants/:id/verify` | Admin/Developer | Approve merchant verification |
+| `PATCH` | `/merchants/:id/reject` | Admin/Developer | Reject merchant verification with reason |
 
 ## Build Approach
 

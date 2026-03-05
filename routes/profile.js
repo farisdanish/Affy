@@ -26,8 +26,19 @@ router.put(
         body('name').optional().trim().notEmpty().withMessage('name cannot be blank').isLength({ max: 100 }).withMessage('name is too long'),
         body('email').optional().trim().normalizeEmail().isEmail().withMessage('valid email is required'),
         body('username').optional().trim().isAlphanumeric().withMessage('username must contain only letters and numbers').isLength({ min: 3, max: 30 }).withMessage('username must be between 3 and 30 characters'),
+        body('merchantProfile.businessName').optional().trim().isLength({ max: 120 }).withMessage('businessName is too long'),
+        body('merchantProfile.businessType').optional().trim().isLength({ max: 80 }).withMessage('businessType is too long'),
+        body('merchantProfile.address').optional().trim().isLength({ max: 300 }).withMessage('address is too long'),
+        body('merchantProfile.city').optional().trim().isLength({ max: 100 }).withMessage('city is too long'),
+        body('merchantProfile.state').optional().trim().isLength({ max: 100 }).withMessage('state is too long'),
+        body('merchantProfile.country').optional().trim().isLength({ max: 100 }).withMessage('country is too long'),
+        body('merchantProfile.geo.lat').optional().isFloat({ min: -90, max: 90 }).withMessage('merchantProfile.geo.lat must be a valid latitude'),
+        body('merchantProfile.geo.lng').optional().isFloat({ min: -180, max: 180 }).withMessage('merchantProfile.geo.lng must be a valid longitude'),
         body('merchantProfile.place').optional().trim().isLength({ max: 200 }).withMessage('place is too long'),
         body('merchantProfile.contactInfo').optional().trim().isLength({ max: 200 }).withMessage('contactInfo is too long'),
+        body('merchantProfile.ssmNumber').optional().trim().isLength({ max: 50 }).withMessage('ssmNumber is too long'),
+        body('merchantProfile.verificationDocs').optional().isArray({ max: 10 }).withMessage('verificationDocs must be an array with up to 10 items'),
+        body('merchantProfile.verificationDocs.*').optional().trim().isLength({ max: 500 }).withMessage('verificationDocs item is too long'),
         body('payoutConfig.bankName').optional().trim().isLength({ max: 100 }).withMessage('bankName is too long'),
         body('payoutConfig.accountNumber').optional().trim().isLength({ max: 50 }).withMessage('accountNumber is too long'),
     ],
@@ -60,8 +71,33 @@ router.put(
 
             // For Merchant, Developer: update merchant profile
             if (['merchant', 'developer'].includes(userRole) && body.merchantProfile) {
-                updateFields['merchantProfile.place'] = body.merchantProfile.place;
-                updateFields['merchantProfile.contactInfo'] = body.merchantProfile.contactInfo;
+                const merchantProfileKeys = [
+                    'businessName',
+                    'businessType',
+                    'address',
+                    'city',
+                    'state',
+                    'country',
+                    'place',
+                    'contactInfo',
+                    'ssmNumber',
+                    'verificationDocs',
+                ];
+
+                merchantProfileKeys.forEach((key) => {
+                    if (body.merchantProfile[key] !== undefined) {
+                        updateFields[`merchantProfile.${key}`] = body.merchantProfile[key];
+                    }
+                });
+
+                if (body.merchantProfile.geo !== undefined) {
+                    if (body.merchantProfile.geo.lat !== undefined) {
+                        updateFields['merchantProfile.geo.lat'] = body.merchantProfile.geo.lat;
+                    }
+                    if (body.merchantProfile.geo.lng !== undefined) {
+                        updateFields['merchantProfile.geo.lng'] = body.merchantProfile.geo.lng;
+                    }
+                }
             }
 
             // For Agent, User: update payout config

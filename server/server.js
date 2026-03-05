@@ -100,6 +100,7 @@ app.use('/api/v1/bookings', require('../routes/bookings'));
 app.use('/api/v1/referrals', require('../routes/referrals'));
 app.use('/api/v1/activity-logs', require('../routes/activityLogs'));
 app.use('/api/v1/stats', require('../routes/stats'));
+app.use('/api/v1/merchants', require('../routes/merchants'));
 
 
 // L1: Global error handler — strip internal details in production
