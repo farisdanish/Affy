@@ -17,6 +17,7 @@ const User = require('../models/User');
 
 const ADMIN_USER = {
     name: 'Admin',
+    username: 'admin',
     email: 'admin@affy.com',
     password: 'admin123',   // Change this in production!
     role: 'admin',
