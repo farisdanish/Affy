@@ -36,18 +36,20 @@ Sprint 1 is complete. Moving to Sprint 2.
 
 Sprint 2 is functionally complete. Moving to Sprint 3.
 
-### Sprint 3 (Monetization Baseline + Any-Merchant Generalization) 🚧
+### Sprint 3 (Audit + Product Spec Hardening) 🚧
 
-- [x] Generalize merchant profile model for any brick-and-mortar business (not mall-only)
-- [x] Add merchant verification state and metadata (`pending/approved/rejected`, SSM number, docs)
-- [x] Add admin verification API (`pending list`, `approve`, `reject`)
-- [x] Gate slot activation for unverified merchants
-- [x] Gate referral attribution for unverified merchants
-- [ ] Merchant booking operations (view queue + confirm/reject/cancel)
-- [ ] Commission lifecycle baseline (`pending -> approved -> payout-ready`)
-- [ ] Basic anti-fraud flags + manual review markers
-- [ ] Agent/merchant conversion analytics endpoints
-- [ ] CI regression coverage for verification and commission lifecycle
+- [ ] Audit current models, migrations, and routes
+- [ ] Generate ERD + entity relationship inventory
+- [ ] Flag schema risks (missing FKs/references, ambiguous fields, unsafe nullability)
+- [ ] Document business rules in plain language before schema expansion
+- [ ] Formalize functional requirements in `GIVEN / WHEN / THEN` format for core flows:
+  - creator referral
+  - merchant listing
+  - booking lifecycle
+  - commission tracking
+  - payout preparation
+- [ ] Define UI design language constraints (mood, colors, typography, anti-generic guardrails)
+- [ ] Capture edge-case decisions and open questions for Sprint 4 implementation
 
 ## Sprint Plan
 
@@ -69,7 +71,15 @@ Sprint 2 is functionally complete. Moving to Sprint 3.
 - Public booking flow capturing `ref` and saving it
 - End of Sprint 2 target: first demoable product
 
-### Sprint 3 - Booking Lifecycle + Commission Baseline (Any Merchant)
+### Sprint 3 - Audit, Schema Validation, and Functional Requirements
+- Reverse-engineer current codebase into an ERD and relationship map
+- Validate schema quality (references, nullability, naming clarity, lifecycle states)
+- Write behavior-first product requirements in `GIVEN / WHEN / THEN` format
+- Freeze business rules for referral attribution, booking confirmation, and commission eligibility
+- Define UI design language constraints before dashboard expansion
+- End of Sprint 3 target: implementation-ready audit + spec pack (schema notes, FRs, UI direction)
+
+### Sprint 4 - Booking Lifecycle + Commission Baseline (Any Merchant)
 - Data model generalization for any merchant vertical (salon, clinic, fitness, F&B, retail services)
 - Merchant verification workflow (SSM + documents + admin approval/rejection)
 - Slot/referral monetization gates for unverified merchants
@@ -79,10 +89,73 @@ Sprint 2 is functionally complete. Moving to Sprint 3.
 - Agent and merchant conversion analytics (bookings vs confirmed vs commission-ready)
 - CI quality hardening (required status checks + regression smoke coverage)
 
-### Sprint 4 - Affiliate Layer
+### Sprint 5 - Affiliate Layer
 - Payment integration planning/prototype (ToyyibPay/FPX/Stripe)
 - Commission payout workflow draft
 - Admin reporting/dashboard iteration
+
+## Sprint 3 Guidelines (Comprehensive Audit)
+
+### Objective
+- Convert current implementation into an implementation-ready audit and specification baseline before building new monetization or payout features.
+
+### Scope Boundary
+- In scope: models, route contracts, role rules, booking/referral/commission logic, state transitions, and UI behavior requirements.
+- Out of scope: new feature shipping unless needed to fix critical audit blockers.
+
+### Audit Workstreams
+1. Schema and Data Integrity Audit
+- Inventory every model and field, including defaults, required flags, enums, indexes, and references.
+- Build ERD and relationship map (User, Merchant profile, Slot, Booking, Referral, Commission, ActivityLog, etc.).
+- Flag integrity risks: missing references, weak uniqueness constraints, ambiguous naming, nullable fields that should be required.
+- Validate lifecycle states (`pending/confirmed/cancelled`, commission statuses) and allowed transitions.
+
+2. API and Behavior Audit
+- Inventory all routes by actor (Public, Agent, Merchant, Admin, Developer).
+- Validate authn/authz per endpoint and ownership boundaries.
+- Check input validation, error response consistency, idempotency expectations, and pagination/filter behavior.
+- Verify traceability from booking event -> attribution -> commission record.
+
+3. Functional Requirements Formalization
+- Write behavior specs for each core flow using `GIVEN / WHEN / THEN`.
+- Cover happy paths, edge cases, and rejection paths (unverified merchant, cancelled booking, duplicate referral, self-referral).
+- Define acceptance criteria that map directly to API outcomes and UI states.
+
+4. UI/UX Audit Constraints
+- Define visual language guardrails: mood, brand colors, typography, layout rules, and anti-generic constraints.
+- Map each dashboard screen to required data, actions, and role visibility.
+- Ensure no new UI is implemented without explicit screen-level requirements.
+
+### Required Deliverables
+- Audit report (`/docs/audit/sprint3-audit-report.md`)
+- ERD (`/docs/audit/sprint3-erd.md` or diagram asset)
+- Functional requirements (`/docs/spec/sprint3-functional-requirements.md`)
+- Risk register with severity and owner (`/docs/audit/sprint3-risk-register.md`)
+- Decision log for schema and behavior choices (`/docs/audit/sprint3-decisions.md`)
+
+### Severity Model (for Findings)
+- `Critical`: data loss, broken attribution, unauthorized access, payout-impacting logic flaws.
+- `High`: incorrect lifecycle transitions, inconsistent commission eligibility, missing ownership checks.
+- `Medium`: weak validation, unclear naming, inconsistent error contracts.
+- `Low`: maintainability and documentation gaps.
+
+### Execution Cadence
+- Day 1-2: model + ERD + route inventory.
+- Day 3: findings triage and risk ranking.
+- Day 4: functional requirements drafting (`GIVEN / WHEN / THEN`).
+- Day 5: decision lock, sign-off, and Sprint 4 implementation handoff.
+
+### Quality Gates
+- No unresolved `Critical` findings at Sprint 3 close.
+- Every core flow has approved `GIVEN / WHEN / THEN` specs.
+- Every commission-triggering event has explicit eligibility and exclusion rules.
+- Role permissions are mapped and verified per endpoint.
+- Open risks have owner, mitigation, and target sprint.
+
+### Definition of Done
+- Audit artifacts are complete, reviewed, and stored under `/docs`.
+- Schema and behavior ambiguities are converted into explicit decisions.
+- Sprint 4 backlog references approved Sprint 3 findings and specs.
 
 ### Deferred
 - Admin dashboard/internal tooling
