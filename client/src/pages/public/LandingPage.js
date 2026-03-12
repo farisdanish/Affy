@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grid, Stack, Typography, CardContent, Divider } from '@mui/material';
 import { Navigate, Link as RouterLink } from 'react-router-dom';
-import { Store, Users, ShieldCheck, Gauge, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Store, Users, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { AppButton, AppCard } from '../../components/common';
 import { useAuth } from '../../context/AuthContext';
 
