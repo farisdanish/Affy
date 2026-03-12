@@ -8,3 +8,4 @@ export { default as AppBadge } from './AppBadge';
 export { default as StatsCard } from './StatsCard';
 export { default as AppAvatar } from './AppAvatar';
 export { default as AppTable } from './AppTable';
+export { default as PageLoader } from './PageLoader';

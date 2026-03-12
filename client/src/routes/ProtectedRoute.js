@@ -1,11 +1,12 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { PageLoader } from '../components/common';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const { isAuthenticated, user, loading } = useAuth();
 
-    if (loading) return null; // Still checking auth state
+    if (loading) return <PageLoader label="Loading workspace" />;
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
