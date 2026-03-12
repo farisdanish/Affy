@@ -1,26 +1,20 @@
 import React from 'react';
 import { Box, Grid, Stack, Typography, CardContent, Divider } from '@mui/material';
 import { Navigate, Link as RouterLink } from 'react-router-dom';
-import { Sparkles, ShieldCheck, Gauge, CalendarCheck, ArrowRight } from 'lucide-react';
+import { Store, Users, ShieldCheck, Gauge, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { AppButton, AppCard } from '../../components/common';
 import { useAuth } from '../../context/AuthContext';
 
-const features = [
-    {
-        title: 'Unified scheduling',
-        description: 'Publish merchant slots with guardrails, track bookings, and keep everyone on the same cadence.',
-        icon: CalendarCheck,
-    },
-    {
-        title: 'Role-aware journeys',
-        description: 'Admin, merchant, agent, and public users see the right layout, actions, and protections by default.',
-        icon: ShieldCheck,
-    },
-    {
-        title: 'Conversion clarity',
-        description: 'Pipeline-style stats and alerts so you spot friction before it hurts revenue.',
-        icon: Gauge,
-    },
+const merchantWins = [
+    'Publish offer slots with rules, pricing, and availability in minutes.',
+    'Route qualified affiliates to the right merchants automatically.',
+    'Track bookings, acceptance, and payouts without spreadsheet chaos.',
+];
+
+const affiliateWins = [
+    'Browse verified merchant offers with clear expectations.',
+    'Get fast booking confirmation and transparent next steps.',
+    'Build repeatable income with a dashboard that keeps you on track.',
 ];
 
 const LandingPage = () => {
@@ -77,9 +71,9 @@ const LandingPage = () => {
                                     width: 'fit-content',
                                 }}
                             >
-                                <Sparkles size={16} color="var(--primary)" />
+                                <ShieldCheck size={16} color="var(--primary)" />
                                 <Typography variant="body2" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>
-                                    Affiliate ops that ship fast
+                                    Built for merchants and affiliates
                                 </Typography>
                             </Box>
 
@@ -93,7 +87,7 @@ const LandingPage = () => {
                                         letterSpacing: '-0.5px',
                                     }}
                                 >
-                                    Affy keeps your affiliate workflows crisp, measurable, and launch-ready.
+                                    Sell more with affiliates who are ready to act.
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -104,8 +98,9 @@ const LandingPage = () => {
                                         fontSize: 'clamp(1rem, 2.2vw, 1.2rem)',
                                     }}
                                 >
-                                    Publish slots, onboard partners, and enforce role-based guardrails without slowing
-                                    down go-to-market. Built for teams that need clarity and speed.
+                                    Affy helps merchants launch affiliate offers faster and helps affiliates find
+                                    opportunities they can book and deliver on. Clear workflows, fewer drop-offs,
+                                    better outcomes for both sides.
                                 </Typography>
                             </Stack>
 
@@ -116,7 +111,7 @@ const LandingPage = () => {
                                     endIcon={ArrowRight}
                                     sx={{ minWidth: 180, justifyContent: 'center' }}
                                 >
-                                    Create an account
+                                    Merchant: list offers
                                 </AppButton>
                                 <AppButton
                                     component={RouterLink}
@@ -124,14 +119,14 @@ const LandingPage = () => {
                                     variant="outlined"
                                     sx={{ minWidth: 180, justifyContent: 'center' }}
                                 >
-                                    Browse slots
+                                    Affiliate: find offers
                                 </AppButton>
                             </Stack>
 
                             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ color: 'var(--text-muted)' }}>
-                                <Typography variant="body2">Role-aware layouts</Typography>
-                                <Typography variant="body2">Built-in booking flows</Typography>
-                                <Typography variant="body2">Light + dark ready</Typography>
+                                <Typography variant="body2">Merchant control</Typography>
+                                <Typography variant="body2">Affiliate quality</Typography>
+                                <Typography variant="body2">Booking clarity</Typography>
                             </Stack>
                         </Stack>
                     </Grid>
@@ -149,10 +144,10 @@ const LandingPage = () => {
                                 <Stack spacing={3}>
                                     <Stack spacing={0.5}>
                                         <Typography variant="overline" sx={{ color: 'var(--text-muted)', letterSpacing: 1 }}>
-                                            Workspace snapshot
+                                            Marketplace snapshot
                                         </Typography>
                                         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                                            Real-time insight for every role
+                                            Match offers with the right affiliates
                                         </Typography>
                                     </Stack>
 
@@ -168,23 +163,23 @@ const LandingPage = () => {
                                             <Stack direction="row" alignItems="center" justifyContent="space-between">
                                                 <Stack spacing={0.5}>
                                                     <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                                        Active slots
+                                                        Live merchant offers
                                                     </Typography>
                                                     <Typography variant="h4" sx={{ fontWeight: 800 }}>
                                                         128
                                                     </Typography>
                                                 </Stack>
-                                                <Sparkles color="var(--primary)" />
+                                                <Store color="var(--primary)" />
                                             </Stack>
                                             <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>
-                                                Routing leads to merchants with SLA-aware notifications.
+                                                Affy keeps availability and payout expectations in sync.
                                             </Typography>
                                         </Box>
 
                                         <Stack spacing={1.5}>
                                             <Stack direction="row" alignItems="center" justifyContent="space-between">
                                                 <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                                    Agent acceptance
+                                                    Affiliate acceptance
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ fontWeight: 700 }}>
                                                     93%
@@ -200,10 +195,10 @@ const LandingPage = () => {
                                             </Stack>
                                             <Stack direction="row" alignItems="center" justifyContent="space-between">
                                                 <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                                    Conversion lift
+                                                    Offer fill rate
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                                                    +18%
+                                                    81%
                                                 </Typography>
                                             </Stack>
                                         </Stack>
@@ -214,31 +209,29 @@ const LandingPage = () => {
                     </Grid>
                 </Grid>
 
-                {/* Feature grid */}
+                {/* Persona value props */}
                 <Box sx={{ mt: { xs: 6, md: 8 } }}>
                     <Stack spacing={1} sx={{ mb: 3 }}>
                         <Typography variant="overline" sx={{ color: 'var(--text-muted)', letterSpacing: 1 }}>
-                            Why Affy
+                            Two sides, one system
                         </Typography>
                         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                            Built for operators who need clarity and velocity.
+                            Affy is built to help merchants sell and affiliates earn.
                         </Typography>
                     </Stack>
                     <Grid container spacing={3}>
-                        {features.map(({ title, description, icon: Icon }) => (
-                            <Grid item xs={12} md={4} key={title}>
-                                <AppCard
-                                    sx={{
-                                        height: '100%',
-                                        border: '1px solid var(--border)',
-                                        background: 'var(--bg-card)',
-                                        boxShadow: 'none',
-                                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                                        '&:hover': { transform: 'translateY(-4px)', boxShadow: 'var(--shadow)' },
-                                    }}
-                                >
-                                    <CardContent>
-                                        <Stack spacing={1.5}>
+                        <Grid item xs={12} md={6}>
+                            <AppCard
+                                sx={{
+                                    height: '100%',
+                                    border: '1px solid var(--border)',
+                                    background: 'var(--bg-card)',
+                                    boxShadow: 'var(--shadow)',
+                                }}
+                            >
+                                <CardContent>
+                                    <Stack spacing={2}>
+                                        <Stack direction="row" spacing={1.5} alignItems="center">
                                             <Box
                                                 sx={{
                                                     width: 44,
@@ -249,19 +242,78 @@ const LandingPage = () => {
                                                     background: 'var(--primary-light)',
                                                 }}
                                             >
-                                                <Icon color="var(--primary)" size={20} />
+                                                <Store color="var(--primary)" size={20} />
                                             </Box>
                                             <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                                                {title}
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                                {description}
+                                                For merchants
                                             </Typography>
                                         </Stack>
-                                    </CardContent>
-                                </AppCard>
-                            </Grid>
-                        ))}
+                                        <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                            Launch affiliate offers without losing control. You decide the rules,
+                                            availability, and who gets access.
+                                        </Typography>
+                                        <Stack spacing={1.2}>
+                                            {merchantWins.map((item) => (
+                                                <Stack key={item} direction="row" spacing={1} alignItems="flex-start">
+                                                    <CheckCircle2 size={16} color="var(--primary)" />
+                                                    <Typography variant="body2">{item}</Typography>
+                                                </Stack>
+                                            ))}
+                                        </Stack>
+                                        <AppButton component={RouterLink} to="/register" endIcon={ArrowRight}>
+                                            Create merchant workspace
+                                        </AppButton>
+                                    </Stack>
+                                </CardContent>
+                            </AppCard>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <AppCard
+                                sx={{
+                                    height: '100%',
+                                    border: '1px solid var(--border)',
+                                    background: 'var(--bg-card)',
+                                    boxShadow: 'var(--shadow)',
+                                }}
+                            >
+                                <CardContent>
+                                    <Stack spacing={2}>
+                                        <Stack direction="row" spacing={1.5} alignItems="center">
+                                            <Box
+                                                sx={{
+                                                    width: 44,
+                                                    height: 44,
+                                                    borderRadius: '12px',
+                                                    display: 'grid',
+                                                    placeItems: 'center',
+                                                    background: 'var(--primary-light)',
+                                                }}
+                                            >
+                                                <Users color="var(--primary)" size={20} />
+                                            </Box>
+                                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                                For affiliates
+                                            </Typography>
+                                        </Stack>
+                                        <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                            Find high-quality merchants fast. Accept clear offers, book slots, and
+                                            execute with confidence.
+                                        </Typography>
+                                        <Stack spacing={1.2}>
+                                            {affiliateWins.map((item) => (
+                                                <Stack key={item} direction="row" spacing={1} alignItems="flex-start">
+                                                    <CheckCircle2 size={16} color="var(--primary)" />
+                                                    <Typography variant="body2">{item}</Typography>
+                                                </Stack>
+                                            ))}
+                                        </Stack>
+                                        <AppButton component={RouterLink} to="/slots" variant="outlined" endIcon={ArrowRight}>
+                                            Browse merchant offers
+                                        </AppButton>
+                                    </Stack>
+                                </CardContent>
+                            </AppCard>
+                        </Grid>
                     </Grid>
                 </Box>
 
@@ -282,11 +334,11 @@ const LandingPage = () => {
                                 How it works
                             </Typography>
                             <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                                Launch an affiliate-ready workspace in minutes.
+                                Connect merchants and affiliates with less friction.
                             </Typography>
                         </Stack>
                         <Grid container spacing={2}>
-                            {['Publish slots', 'Invite partners', 'Track outcomes'].map((step, index) => (
+                            {['List offers', 'Match affiliates', 'Close the loop'].map((step, index) => (
                                 <Grid item xs={12} md={4} key={step}>
                                     <Stack spacing={1.5}>
                                         <Box
@@ -308,9 +360,9 @@ const LandingPage = () => {
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
                                             {[
-                                                'Create or import merchant slots with pricing and availability in one place.',
-                                                'Assign roles, share access links, and keep guardrails consistent across teams.',
-                                                'Monitor booking velocity, agent acceptance, and payout readiness in real time.',
+                                                'Merchants set availability, payouts, and guardrails for every offer.',
+                                                'Affiliates claim the right offers, with clear timelines and expectations.',
+                                                'Track outcomes, approve payouts, and reuse what converts.',
                                             ][index]}
                                         </Typography>
                                     </Stack>
@@ -320,16 +372,16 @@ const LandingPage = () => {
                         <Divider sx={{ borderColor: 'var(--border)' }} />
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
                             <AppButton component={RouterLink} to="/register" endIcon={ArrowRight}>
-                                Start now
+                                Start with a merchant workspace
                             </AppButton>
                             <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                                Already collaborating?{' '}
+                                Want to earn as an affiliate?{' '}
                                 <Box
                                     component={RouterLink}
                                     to="/login"
                                     sx={{ color: 'var(--primary)', fontWeight: 700 }}
                                 >
-                                    Log in
+                                    Join and browse offers
                                 </Box>
                             </Typography>
                         </Stack>
