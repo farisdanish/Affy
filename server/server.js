@@ -20,7 +20,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://affy-three.vercel.app'
+    'https://affy.farisantoni.com'
   ],
   credentials: true, // H5: allow httpOnly cookies
 }));
