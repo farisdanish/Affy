@@ -82,7 +82,12 @@ const AppNavbar = () => {
         >
             <Toolbar sx={{ px: { xs: 2, md: 3 }, py: { xs: 1, md: 0.5 } }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    <Typography
+                        component={Link}
+                        to="/"
+                        variant="h6"
+                        sx={{ fontWeight: 700, color: 'inherit', textDecoration: 'none' }}
+                    >
                         {title}
                     </Typography>
 
